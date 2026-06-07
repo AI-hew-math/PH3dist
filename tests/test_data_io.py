@@ -12,3 +12,7 @@ def test_load_song_nodes_returns_pitch_duration_tuples():
     assert isinstance(p, str) and isinstance(d, str)
     assert "<SOS>" not in [n[0] for n in nodes]
     assert "<EOS>" not in [n[0] for n in nodes]
+
+def test_rests_are_excluded():
+    nodes = load_song_nodes("01 J-Sangnyeongsan_Geomungo_part(0719)")
+    assert all(p != "rest" for p, _ in nodes)

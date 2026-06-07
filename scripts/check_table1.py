@@ -7,4 +7,4 @@ from ph_music.verify import analyze_song, intervals
 res = analyze_song("01 J-Sangnyeongsan_Geomungo_part(0719)")
 for k in ("d1", "d3", "d2"):
     print(k, [(round(b,4), round(d,4)) for b, d in intervals(res, k)])
-print("Expect d1 has 2 bars incl ~[0.0909,0.125] and ~[0.2,0.25]; d2/d3 have the [0.0909,0.125] bar.")
+print("MATCH paper Table 1: d1=[1/11≈0.0909,1/8=0.125],[1/5=0.2,1/4=0.25]; d2=d3=[1/11≈0.0909,1/8=0.125].")

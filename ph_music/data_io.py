@@ -17,14 +17,17 @@ def list_songs():
     return sorted(_load_all().keys())
 
 def load_song_nodes(name):
-    """Return [(pitch_label, duration_str), ...] with SOS/EOS removed.
-    pitch_label = 'rest' for rests else f'{pitch}{octave}'."""
+    """Return [(pitch_label, duration_str), ...] for pitched notes only.
+
+    Paper node definition: a node is a (pitch, duration) pair where pitch is a
+    sounding pitch.  Rest tokens are not pitches and are therefore excluded;
+    notes on either side of a rest become consecutive in the sequence.
+    Special tokens (<SOS>/<EOS>/<PAD>) are also excluded."""
     d = _load_all()[name]
     pit, octv, dur = d["Song_pitch"], d["Song_octave"], d["Song_duration"]
     nodes = []
     for p, o, t in zip(pit, octv, dur):
-        if p in _SPECIAL:
+        if p in _SPECIAL or p == "rest":
             continue
-        label = "rest" if p == "rest" else f"{p}{o}"
-        nodes.append((label, str(t)))
+        nodes.append((f"{p}{o}", str(t)))
     return nodes
