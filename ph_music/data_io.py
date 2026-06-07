@@ -1,7 +1,8 @@
 import os, pickle, functools
 
 _DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
-_PKLS = ["group1_song_information.pkl", "group2_song_information.pkl", "group3_song_information.pkl"]
+_PKLS = ["group1_song_information.pkl", "group2_song_information.pkl", "group3_song_information.pkl",
+         "showcase_song_information.pkl"]
 _SPECIAL = {"<SOS>", "<EOS>", "<PAD>"}
 
 @functools.lru_cache(maxsize=1)
