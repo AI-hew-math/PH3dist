@@ -15,10 +15,12 @@ def analyze_song(name):
     }
 
 def birth_edge_sets(res):
+    """Return (B1, B2, B3): the sets of birth edges for d1, d2, d3.
+    Paper Prop 4.2 guarantees B2 ⊆ B3 ⊆ B1."""
     B1 = {b["birth_edge"] for b in res["d1"]}
     B2 = {b["birth_edge"] for b in res["d2"]}
     B3 = {b["birth_edge"] for b in res["d3"]}
-    return B1, B3, B2
+    return B1, B2, B3
 
 def intervals(res, key, ndigits=6):
     return sorted((round(b["birth"], ndigits), round(b["death"], ndigits))

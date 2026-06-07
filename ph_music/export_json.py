@@ -1,6 +1,9 @@
-import os, json, re
+import os, json, math, re
 import networkx as nx
 from ph_music.verify import analyze_song
+
+def _fin(x):
+    return None if math.isinf(x) else round(x, 5)
 
 def _slug(name):
     return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
@@ -17,7 +20,7 @@ def export_song(name, outdir="web/data"):
                       for i in range(G.number_of_nodes())],
         "matrices": {k: [[round(float(x), 5) for x in row] for row in res["matrices"][k]]
                      for k in ("d1", "d2", "d3")},
-        "persistence": {k: [{"birth": round(b["birth"], 5), "death": round(b["death"], 5),
+        "persistence": {k: [{"birth": round(b["birth"], 5), "death": _fin(b["death"]),
                              "birth_edge": list(b["birth_edge"]), "cycle": b["cycle"]}
                             for b in res[k]] for k in ("d1", "d2", "d3")},
     }
