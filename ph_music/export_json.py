@@ -22,7 +22,8 @@ def export_song(name, outdir="web/data"):
                             for b in res[k]] for k in ("d1", "d2", "d3")},
     }
     path = os.path.join(outdir, f"{_slug(name)}.json")
-    json.dump(data, open(path, "w"), ensure_ascii=False)
+    with open(path, "w") as fh:
+        json.dump(data, fh, ensure_ascii=False)
     return path
 
 def export_all(names, outdir="web/data"):
