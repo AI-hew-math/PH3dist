@@ -42,13 +42,13 @@ def make_signature(song, outdir="out"):
         _draw(ax, G, pos, cycles, color, f"${{{key[0]}}}_{{{key[1]}}}$:  {len(cycles)} cycles")
     fig.subplots_adjust(left=0.01, right=0.99, top=0.90, bottom=0.01, wspace=0.04)
     poster_pdf = os.path.join(outdir, "signature.pdf")
-    fig.savefig(poster_pdf, bbox_inches="tight", facecolor=palette.PAPER); plt.close(fig)
+    fig.savefig(poster_pdf, bbox_inches="tight", transparent=True); plt.close(fig)
 
     frames = []
     for key, cycles, color in panels:
         f, a = plt.subplots(figsize=(5, 5.2)); f.patch.set_facecolor(palette.PAPER)
         _draw(a, G, pos, cycles, color, f"{key.upper()}: {len(cycles)} cycles")
         fp = os.path.join(outdir, f"signature_{key}.png")
-        f.savefig(fp, dpi=160, bbox_inches="tight", facecolor=palette.PAPER); plt.close(f)
+        f.savefig(fp, dpi=160, bbox_inches="tight", transparent=True); plt.close(f)
         frames.append(fp)
     return {"poster_pdf": poster_pdf, "frames": frames}

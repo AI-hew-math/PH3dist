@@ -38,7 +38,7 @@ def plot_distance_matrices(res, path):
         ax.set_xticks([]); ax.set_yticks([])
     cb = fig.colorbar(im, ax=axes, fraction=0.045, pad=0.02)
     cb.ax.tick_params(labelsize=18)
-    fig.savefig(path, bbox_inches="tight", facecolor=palette.PAPER); plt.close(fig)
+    fig.savefig(path, bbox_inches="tight", transparent=True); plt.close(fig)
     return str(path)
 
 
@@ -58,7 +58,7 @@ def plot_barcodes(res, path):
         ax.set_xlim(0, xmax * 1.05)
         ax.tick_params(axis="x", labelsize=18)
         ax.margins(y=0.18)
-    fig.tight_layout(); fig.savefig(path, bbox_inches="tight", facecolor=palette.PAPER); plt.close(fig)
+    fig.tight_layout(); fig.savefig(path, bbox_inches="tight", transparent=True); plt.close(fig)
     return str(path)
 
 
@@ -76,7 +76,7 @@ def plot_persistence_diagram(res, path):
     ax.set_xlabel("Birth", fontsize=26); ax.set_ylabel("Death", fontsize=26)
     ax.tick_params(labelsize=18)
     ax.legend(fontsize=24, markerscale=1.1, loc="lower right")
-    fig.tight_layout(); fig.savefig(path, bbox_inches="tight", facecolor=palette.PAPER); plt.close(fig)
+    fig.tight_layout(); fig.savefig(path, bbox_inches="tight", transparent=True); plt.close(fig)
     return str(path)
 
 
@@ -89,5 +89,5 @@ def plot_network(res, path):
     nx.draw_networkx_nodes(G, pos, ax=ax, node_size=130, node_color=palette.D2,
                            edgecolors=palette.INK, linewidths=0.8)
     ax.axis("off")
-    fig.savefig(path, bbox_inches="tight", facecolor=palette.PAPER); plt.close(fig)
+    fig.savefig(path, bbox_inches="tight", transparent=True); plt.close(fig)
     return str(path)

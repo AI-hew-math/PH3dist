@@ -1,5 +1,5 @@
 \documentclass[final]{beamer}
-\usepackage[orientation=portrait,size=custom,width=90,height=130,scale=1.55]{beamerposter}
+\usepackage[orientation=portrait,size=custom,width=90,height=130,scale=1.5]{beamerposter}
 \usepackage{lmodern}
 \renewcommand{\familydefault}{\sfdefault}
 \usepackage[T1]{fontenc}
@@ -32,34 +32,32 @@
 \end{beamercolorbox}
 \vskip1.6ex
 
-% ===================== HERO STRIP =====================
+% ===================== HERO =====================
 \begin{columns}[t,onlytextwidth]
-  \begin{column}{0.37\paperwidth}
+  \begin{column}{0.40\paperwidth}
     \begin{block}{The big idea}
-      \Large
-      Distance is a \textbf{tunable resolution knob} on musical structure.
-      Sweeping \done${}\to{}$\dthree${}\to{}$\dtwo\ distills a piece down to its
-      \textbf{core cyclic skeleton}.\par\vskip0.8ex
+      \Large Distance is a \textbf{tunable resolution knob} on musical structure ---
+      sweeping \done${}\to{}$\dthree${}\to{}$\dtwo\ distills a piece down to its
+      \textbf{core cyclic skeleton}.\par\vskip0.9ex
       \large
-      \begin{itemize}\setlength{\itemsep}{0.7ex}
-        \item Three path distances: \done\ (min edges),
-              \dtwo\ (min weight, the only metric), \dthree\ (hybrid).
-        \item Proven $\textcolor{dcD2}{d_2}\!\le\!\textcolor{dcD3}{d_3}\!\le\!\textcolor{dcD1}{d_1}$
-              and barcode injection $B_2\!\subseteq\!B_3\!\subseteq\!B_1$.
-        \item Validated on real Korean court music --- an exact match to the paper.
+      \begin{itemize}\setlength{\itemsep}{1.0ex}
+        \item \textbf{Three path distances}: \done\ (min edges),
+              \dtwo\ (min weight --- the only metric), \dthree\ (hybrid).
+        \item \textbf{Proven ordering} $\textcolor{dcD2}{d_2}\!\le\!\textcolor{dcD3}{d_3}\!\le\!\textcolor{dcD1}{d_1}$,
+              lifting to a barcode injection $B_2\!\subseteq\!B_3\!\subseteq\!B_1$.
+        \item \textbf{Validated} on real Korean court music --- an exact match to the paper's Table~1.
       \end{itemize}
     \end{block}
   \end{column}
-  \begin{column}{0.62\paperwidth}
+  \begin{column}{0.59\paperwidth}
     \begin{block}{Cycle skeleton extraction \;\textmd{(Sanghyeondodeuri, geomungo)}}
-      \centering
-      \includegraphics[width=\linewidth]{signature.pdf}\\[0.4ex]
+      {\centering\includegraphics[width=\linewidth]{signature.pdf}\par}\vskip0.4ex
       {\Large As \done${}\to{}$\dthree${}\to{}$\dtwo, cycles vanish
-      \textbf{7$\,\to\,$4$\,\to\,$3}: only the robust core loops survive.}
+      \textbf{7$\,\to\,$4$\,\to\,$3} --- only the robust core loops survive.}
     \end{block}
   \end{column}
 \end{columns}
-\vskip1.0ex
+\vskip0.8ex
 % ===================== 3 CONTENT COLUMNS =====================
 \begin{columns}[t,onlytextwidth]
   % ---- COLUMN 1 ----
@@ -179,7 +177,7 @@
     \quad Contact: hew0920@postech.ac.kr}
   \end{column}
   \begin{column}{0.27\paperwidth}\raggedleft
-    \includegraphics[height=5cm]{qr_arxiv.png}\;{\color{dcPaper}\normalsize arXiv:2506.13595}
+    \includegraphics[height=4cm]{qr_arxiv.png}\;{\color{dcPaper}\normalsize arXiv:2506.13595}
   \end{column}
 \end{columns}
 \end{beamercolorbox}
