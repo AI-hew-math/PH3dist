@@ -65,13 +65,104 @@
 % ---------- 3 CONTENT COLUMNS ----------
 \begin{columns}[t]
   \begin{column}{0.32\paperwidth}
-    % === COLUMN 1 (Task 4) ===
+    % === COLUMN 1 ===
+    \begin{block}{From music to a graph}
+      \normalsize Each \textbf{node} $=$ (pitch, duration); an \textbf{edge} joins notes that
+      occur consecutively; the \textbf{weight} is $1/(\text{co-occurrence count})$
+      (frequent neighbors are closer). Rests are skipped.
+    \end{block}
+
+    \begin{block}{Three path distances}
+      \normalsize For nodes $v,w$ on the music graph $M=(V,E,W)$:
+      \begin{itemize}
+        \item[\done] \textbf{min-edge path} (fewest edges; weighted sum along it).
+        \item[\dtwo] \textbf{min-weight path} (smallest total weight) --- \emph{the only true metric}.
+        \item[\dthree] \textbf{hybrid}: min weight \emph{among} the fewest-edge paths.
+      \end{itemize}
+      \vskip0.5ex\centering
+      \begin{tikzpicture}[scale=1.0,every node/.style={circle,draw=dcInk,fill=dcPaper,
+          inner sep=2pt,font=\small}]
+        \node (a) at (0,0) {a}; \node (b) at (2,1) {b};
+        \node (c) at (4,0) {c}; \node (d) at (2,-1) {d};
+        \draw[dcInk] (a)--(b) node[midway,above,draw=none,fill=none]{1};
+        \draw[dcInk] (b)--(c) node[midway,above,draw=none,fill=none]{1};
+        \draw[dcInk] (a)--(d) node[midway,below,draw=none,fill=none]{1};
+        \draw[dcInk] (d)--(c) node[midway,below,draw=none,fill=none]{1};
+        \draw[dcD2,very thick] (a)--(d)--(c);
+      \end{tikzpicture}\\
+      {\small Path-based distance uses existing edges (red), not a new direct link.}
+    \end{block}
+
+    \begin{block}{Only \dtwo\ is a metric}
+      \normalsize $\textcolor{dcD2}{d_2}$ satisfies the triangle inequality;
+      $\textcolor{dcD1}{d_1}$ and $\textcolor{dcD3}{d_3}$ can violate it
+      (e.g.\ a heavy direct edge). Yet all three give meaningful musical structure.
+    \end{block}
   \end{column}
   \begin{column}{0.32\paperwidth}
-    % === COLUMN 2 (Task 5) ===
+    % === COLUMN 2 ===
+    \begin{block}{Main result: a universal ordering}
+      \normalsize For \emph{every} pair of nodes,
+      \[ \textcolor{dcD2}{d_2(v,w)} \;\le\; \textcolor{dcD3}{d_3(v,w)} \;\le\; \textcolor{dcD1}{d_1(v,w)}. \]
+      This carries over to 1-dimensional persistent homology.
+    \end{block}
+
+    \begin{block}{Barcode injection $B_2\subseteq B_3\subseteq B_1$}
+      \normalsize The birth edges satisfy $B_2\subseteq B_3\subseteq B_1$, giving injections
+      \[ \mathrm{bcd}_1(\textcolor{dcD2}{d_2}) \hookrightarrow
+         \mathrm{bcd}_1(\textcolor{dcD3}{d_3}) \hookrightarrow
+         \mathrm{bcd}_1(\textcolor{dcD1}{d_1}). \]
+      Each cycle keeps its \textbf{birth}; its \textbf{lifespan grows}
+      $\textcolor{dcD2}{d_2}\!\le\!\textcolor{dcD3}{d_3}\!\le\!\textcolor{dcD1}{d_1}$,
+      and the number of cycles can only increase.
+      \vskip0.6ex\centering
+      \begin{tikzpicture}[yscale=0.9]
+        \foreach \y/\bx/\dx/\col in {2/0/3.0/dcD1, 1/0/2.0/dcD3, 0/0/1.2/dcD2}{
+          \draw[\col,line width=3pt] (\bx,\y) -- (\dx,\y);
+        }
+        \node[right,font=\small] at (3.1,2) {\textcolor{dcD1}{$d_1$}: longest};
+        \node[right,font=\small] at (2.1,1) {\textcolor{dcD3}{$d_3$}};
+        \node[right,font=\small] at (1.3,0) {\textcolor{dcD2}{$d_2$}: shortest};
+        \draw[dcInk,dashed] (0,-0.4) -- (0,2.4) node[above,font=\small]{shared birth};
+      \end{tikzpicture}
+    \end{block}
+
+    \begin{block}{Why it matters}
+      \normalsize The same piece yields \emph{different but nested} topological readings.
+      $\textcolor{dcD2}{d_2}$ exposes the robust core; $\textcolor{dcD1}{d_1}$ adds finer,
+      peripheral loops. The changes are \textbf{systematic, not random}.
+    \end{block}
   \end{column}
   \begin{column}{0.32\paperwidth}
-    % === COLUMN 3 (Task 6) ===
+    % === COLUMN 3 ===
+    \begin{block}{Evidence on real music}
+      \centering
+      \includegraphics[width=\linewidth]{fig_distance_matrices.pdf}\\[0.3ex]
+      {\small Distance matrices: \textcolor{dcD2}{$d_2$} (cool/smooth) $\to$
+       \textcolor{dcD1}{$d_1$} (hot) --- the ordering is visible.}\\[0.6ex]
+      \includegraphics[width=\linewidth]{fig_barcodes.pdf}\\[0.3ex]
+      {\small $H_1$ barcodes: \textbf{7$\,/\,$4$\,/\,$3} bars for
+       \textcolor{dcD1}{$d_1$}$/$\textcolor{dcD3}{$d_3$}$/$\textcolor{dcD2}{$d_2$};
+       lifespans grow, births shared.}
+    \end{block}
+
+    \begin{block}{Application: distilling the core}
+      \normalsize Ranking $\textcolor{dcD1}{d_1}$ cycles by how far down they survive
+      ($\to\textcolor{dcD3}{d_3}\to\textcolor{dcD2}{d_2}$) gives a principled
+      \textbf{importance hierarchy of musical loops} --- a multi-resolution descriptor of a piece.
+    \end{block}
+
+    \begin{block}{Takeaways \& future work}
+      \normalsize
+      \begin{itemize}
+        \item Distance choice $=$ a tunable lens; results are nested, not arbitrary.
+        \item Toward \textbf{AI music composition} with multiple stylistic perspectives
+              from one source (distance-varied generation).
+      \end{itemize}
+      \vskip0.4ex\centering
+      \includegraphics[width=3.5cm]{qr_project.png}\;
+      {\small Audio demos \& interactive explorer on the project page.}
+    \end{block}
   \end{column}
 \end{columns}
 
