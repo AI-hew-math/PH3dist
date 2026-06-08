@@ -50,10 +50,10 @@
     \end{block}
   \end{column}
   \begin{column}{0.59\paperwidth}
-    \begin{block}{Cycle skeleton extraction \;\textmd{(Sanghyeondodeuri, geomungo)}}
+    \begin{block}{Cycle skeleton extraction}
       {\centering\includegraphics[width=\linewidth]{signature.pdf}\par}\vskip0.4ex
-      {\Large As \done${}\to{}$\dthree${}\to{}$\dtwo, cycles vanish
-      \textbf{7$\,\to\,$4$\,\to\,$3} --- only the robust core loops survive.}
+      {\Large On \emph{Sanghyeondodeuri} (geomungo): as \done${}\to{}$\dthree${}\to{}$\dtwo,
+      cycles vanish \textbf{7$\,\to\,$4$\,\to\,$3} --- only the robust core loops survive.}
     \end{block}
   \end{column}
 \end{columns}
@@ -98,12 +98,12 @@
   \end{column}
   % ---- COLUMN 2 ----
   \begin{column}{0.32\paperwidth}
-    \begin{block}{Main result: a universal ordering}
+    \begin{block}{A universal ordering}
       \large For \emph{every} pair of nodes,
       \[ \textcolor{dcD2}{d_2(v,w)} \;\le\; \textcolor{dcD3}{d_3(v,w)} \;\le\; \textcolor{dcD1}{d_1(v,w)}. \]
       This carries over to one-dimensional persistent homology.
     \end{block}
-    \begin{block}{Barcode injection $B_2\subseteq B_3\subseteq B_1$}
+    \begin{block}{Barcode injection}
       \large The birth edges nest, $B_2\subseteq B_3\subseteq B_1$, giving injections
       \[ \mathrm{bcd}_1(\textcolor{dcD2}{d_2}) \hookrightarrow
          \mathrm{bcd}_1(\textcolor{dcD3}{d_3}) \hookrightarrow
@@ -148,7 +148,7 @@
       \emph{Twinkle, Twinkle} variations. Our pipeline reproduces the paper's
       Table~1 \textbf{exactly} --- same births, cycle counts, and inclusion relation.
     \end{block}
-    \begin{block}{Application: distilling the core}
+    \begin{block}{Distilling the core}
       \large Ranking $\textcolor{dcD1}{d_1}$ cycles by how far down they survive
       ($\to\textcolor{dcD3}{d_3}\to\textcolor{dcD2}{d_2}$) gives a principled
       \textbf{importance hierarchy of musical loops} --- a multi-resolution descriptor of a piece.
@@ -169,17 +169,10 @@
 
 \vfill
 % ===================== FOOTER =====================
-\begin{beamercolorbox}[wd=\paperwidth,sep=0.9ex,leftskip=2ex,rightskip=2ex]{headline}
-\begin{columns}[c,onlytextwidth]
-  \begin{column}{0.70\paperwidth}
-    {\color{dcPaper}\normalsize Key refs: Heo--Choi--Jung (2024) arXiv:2501.03553; Tran--Park--Jung (2023) \emph{J.\ Math.\ Music}; Sethares--Budney (2014).
-    \quad Funded by NRF Korea (2021R1A2C3009648) \& KIAS Transdisciplinary program.
-    \quad Contact: hew0920@postech.ac.kr}
-  \end{column}
-  \begin{column}{0.27\paperwidth}\raggedleft
-    \includegraphics[height=4cm]{qr_arxiv.png}\;{\color{dcPaper}\normalsize arXiv:2506.13595}
-  \end{column}
-\end{columns}
+\begin{beamercolorbox}[wd=\paperwidth,sep=1.0ex,leftskip=2ex,rightskip=2ex]{headline}
+  {\color{dcPaper}\normalsize Key refs: Heo--Choi--Jung (2024) arXiv:2501.03553; Tran--Park--Jung (2023) \emph{J.\ Math.\ Music}; Sethares--Budney (2014). \quad
+  Funded by NRF Korea (2021R1A2C3009648) \& KIAS Transdisciplinary program. \quad
+  Contact: hew0920@postech.ac.kr \quad This work: arXiv:2506.13595}
 \end{beamercolorbox}
 \end{frame}
 \end{document}
