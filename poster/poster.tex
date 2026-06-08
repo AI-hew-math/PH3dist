@@ -1,24 +1,23 @@
 \documentclass[final]{beamer}
-\usepackage[orientation=portrait,size=custom,width=90,height=130,scale=1.4]{beamerposter}
+\usepackage[orientation=portrait,size=custom,width=90,height=130,scale=1.55]{beamerposter}
 \usepackage{lmodern}
 \renewcommand{\familydefault}{\sfdefault}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx,booktabs,amsmath,amssymb,array}
 \usepackage{dancheong}
 \graphicspath{{figures/}}
-\newlength{\colheight}\setlength{\colheight}{70cm}
 \title{Persistent Homology of Music Network with Three Different Distances}
 \begin{document}
 \begin{frame}[t]
 % ===================== HEADER =====================
-\begin{beamercolorbox}[wd=\paperwidth,sep=1.2ex,leftskip=2ex,rightskip=2ex]{headline}
+\begin{beamercolorbox}[wd=\paperwidth,sep=1.4ex,leftskip=2ex,rightskip=2ex]{headline}
 \begin{columns}[c,onlytextwidth]
   \begin{column}{0.12\paperwidth}\centering
     {\color{dcPaper}\Large POSTECH\\MINDS\\KIAS}
   \end{column}
   \begin{column}{0.74\paperwidth}\centering
-    {\color{dcPaper}\veryHuge\bfseries Persistent Homology of Music Network}\\[0.4ex]
-    {\color{dcPaper}\veryHuge\bfseries with Three Different Distances}\\[0.8ex]
+    {\color{dcPaper}\Huge\bfseries Persistent Homology of Music Network}\\[0.4ex]
+    {\color{dcPaper}\Huge\bfseries with Three Different Distances}\\[0.9ex]
     {\color{dcPaper}\large \underline{Eunwoo Heo}$^{1,2,\ast}$ \quad Byeongchan Choi$^{1,2}$ \quad
      Myungock Kim$^{3}$ \quad Mai Lan Tran$^{1,2}$ \quad Jae-Hun Jung$^{1,2}$}\\[0.4ex]
     {\color{dcPaper}\normalsize $^{1}$Dept.\ of Mathematics, POSTECH \quad
@@ -31,158 +30,148 @@
   \end{column}
 \end{columns}
 \end{beamercolorbox}
-\vskip1.4ex
+\vskip1.6ex
 
-% ===================== CONTENT =====================
-% ---------- HERO STRIP ----------
+% ===================== HERO STRIP =====================
 \begin{columns}[t,onlytextwidth]
-  \begin{column}{0.40\paperwidth}
+  \begin{column}{0.37\paperwidth}
     \begin{block}{The big idea}
-      \large
+      \Large
       Distance is a \textbf{tunable resolution knob} on musical structure.
       Sweeping \done${}\to{}$\dthree${}\to{}$\dtwo\ distills a piece down to its
-      \textbf{core cyclic skeleton}.\par\vskip0.6ex
-      \normalsize
-      \begin{itemize}
-        \item Three path distances on the music graph: \done\ (min edges),
+      \textbf{core cyclic skeleton}.\par\vskip0.8ex
+      \large
+      \begin{itemize}\setlength{\itemsep}{0.7ex}
+        \item Three path distances: \done\ (min edges),
               \dtwo\ (min weight, the only metric), \dthree\ (hybrid).
-        \item Proven ordering \;$\textcolor{dcD2}{d_2}\!\le\!\textcolor{dcD3}{d_3}\!\le\!\textcolor{dcD1}{d_1}$\;
+        \item Proven $\textcolor{dcD2}{d_2}\!\le\!\textcolor{dcD3}{d_3}\!\le\!\textcolor{dcD1}{d_1}$
               and barcode injection $B_2\!\subseteq\!B_3\!\subseteq\!B_1$.
-        \item Validated on real Korean court music --- exact match to the paper's results.
+        \item Validated on real Korean court music --- an exact match to the paper.
       \end{itemize}
     \end{block}
   \end{column}
-  \begin{column}{0.59\paperwidth}
+  \begin{column}{0.62\paperwidth}
     \begin{block}{Cycle skeleton extraction \;\textmd{(Sanghyeondodeuri, geomungo)}}
       \centering
-      \includegraphics[width=\linewidth]{signature.pdf}\\[0.3ex]
-      {\large As \done${}\to{}$\dthree${}\to{}$\dtwo, cycles vanish
+      \includegraphics[width=\linewidth]{signature.pdf}\\[0.4ex]
+      {\Large As \done${}\to{}$\dthree${}\to{}$\dtwo, cycles vanish
       \textbf{7$\,\to\,$4$\,\to\,$3}: only the robust core loops survive.}
     \end{block}
   \end{column}
 \end{columns}
-\vskip0.8ex
-% ---------- 3 CONTENT COLUMNS ----------
+\vskip1.0ex
+% ===================== 3 CONTENT COLUMNS =====================
 \begin{columns}[t,onlytextwidth]
   % ---- COLUMN 1 ----
   \begin{column}{0.32\paperwidth}
-  \begin{minipage}[t][\colheight][s]{\linewidth}
     \begin{block}{From music to a graph}
-      \normalsize Each \textbf{node} $=$ (pitch, duration); an \textbf{edge} joins notes that
-      occur consecutively; the \textbf{weight} is $1/(\text{co-occurrence count})$
-      (frequent neighbors are closer). Rests are skipped.
+      \large Each \textbf{node} $=$ (pitch, duration); an \textbf{edge} joins consecutive notes;
+      the \textbf{weight} is $1/(\text{co-occurrence count})$ --- frequent neighbors are closer.
+      Rests are skipped.
     \end{block}
-    \vfill
     \begin{block}{Three path distances}
-      \normalsize For nodes $v,w$ on the music graph $M=(V,E,W)$:
-      \begin{itemize}
-        \item[\done] \textbf{min-edge path} (fewest edges; weighted sum along it).
-        \item[\dtwo] \textbf{min-weight path} (smallest total weight) --- \emph{the only true metric}.
-        \item[\dthree] \textbf{hybrid}: min weight \emph{among} the fewest-edge paths.
+      \large For nodes $v,w$ on the music graph $M=(V,E,W)$:
+      \begin{itemize}\setlength{\itemsep}{0.6ex}
+        \item[\done] \textbf{min-edge path} --- fewest edges (weighted sum along it).
+        \item[\dtwo] \textbf{min-weight path} --- least total weight; \emph{the only true metric}.
+        \item[\dthree] \textbf{hybrid} --- min weight \emph{among} the fewest-edge paths.
       \end{itemize}
-      \vskip0.5ex\centering
-      \begin{tikzpicture}[scale=1.3,every node/.style={circle,draw=dcInk,fill=dcPaper,
-          inner sep=2pt,font=\small}]
+      \vskip0.6ex\centering
+      \begin{tikzpicture}[scale=2.0,every node/.style={circle,draw=dcInk,fill=dcPaper,
+          line width=1pt,inner sep=3pt,font=\large}]
         \node (a) at (0,0) {a}; \node (b) at (2,1) {b};
         \node (c) at (4,0) {c}; \node (d) at (2,-1) {d};
-        \draw[dcInk] (a)--(b) node[midway,above,draw=none,fill=none]{1};
-        \draw[dcInk] (b)--(c) node[midway,above,draw=none,fill=none]{1};
-        \draw[dcInk] (a)--(d) node[midway,below,draw=none,fill=none]{1};
-        \draw[dcInk] (d)--(c) node[midway,below,draw=none,fill=none]{1};
-        \draw[dcD2,very thick] (a)--(d)--(c);
-      \end{tikzpicture}\\
-      {\small Path-based distance uses existing edges (red), not a new direct link.}
+        \draw[dcInk,line width=1pt] (a)--(b) node[midway,above,draw=none,fill=none]{1};
+        \draw[dcInk,line width=1pt] (b)--(c) node[midway,above,draw=none,fill=none]{1};
+        \draw[dcInk,line width=1pt] (a)--(d) node[midway,below,draw=none,fill=none]{1};
+        \draw[dcInk,line width=1pt] (d)--(c) node[midway,below,draw=none,fill=none]{1};
+        \draw[dcD2,line width=3pt] (a)--(d)--(c);
+      \end{tikzpicture}\\[0.3ex]
+      {\normalsize Path-based distance uses existing edges (red), not a new direct link.}
     \end{block}
-    \vfill
     \begin{block}{Only \dtwo\ is a metric}
-      \normalsize $\textcolor{dcD2}{d_2}$ satisfies the triangle inequality;
+      \large $\textcolor{dcD2}{d_2}$ satisfies the triangle inequality;
       $\textcolor{dcD1}{d_1}$ and $\textcolor{dcD3}{d_3}$ can violate it
-      (e.g.\ a heavy direct edge). Yet all three give meaningful musical structure.
+      (a heavy direct edge). Yet all three give meaningful musical structure.
     \end{block}
-  \end{minipage}
   \end{column}
   % ---- COLUMN 2 ----
   \begin{column}{0.32\paperwidth}
-  \begin{minipage}[t][\colheight][s]{\linewidth}
     \begin{block}{Main result: a universal ordering}
-      \normalsize For \emph{every} pair of nodes,
+      \large For \emph{every} pair of nodes,
       \[ \textcolor{dcD2}{d_2(v,w)} \;\le\; \textcolor{dcD3}{d_3(v,w)} \;\le\; \textcolor{dcD1}{d_1(v,w)}. \]
-      This carries over to 1-dimensional persistent homology.
+      This carries over to one-dimensional persistent homology.
     \end{block}
-    \vfill
     \begin{block}{Barcode injection $B_2\subseteq B_3\subseteq B_1$}
-      \normalsize The birth edges satisfy $B_2\subseteq B_3\subseteq B_1$, giving injections
+      \large The birth edges nest, $B_2\subseteq B_3\subseteq B_1$, giving injections
       \[ \mathrm{bcd}_1(\textcolor{dcD2}{d_2}) \hookrightarrow
          \mathrm{bcd}_1(\textcolor{dcD3}{d_3}) \hookrightarrow
          \mathrm{bcd}_1(\textcolor{dcD1}{d_1}). \]
       Each cycle keeps its \textbf{birth}; its \textbf{lifespan grows}
       $\textcolor{dcD2}{d_2}\!\le\!\textcolor{dcD3}{d_3}\!\le\!\textcolor{dcD1}{d_1}$,
       and the number of cycles can only increase.
-      \vskip0.8ex\centering
-      \begin{tikzpicture}[xscale=1.5,yscale=1.1]
+      \vskip1.0ex\centering
+      \begin{tikzpicture}[xscale=2.6,yscale=1.7]
         \foreach \y/\bx/\dx/\col in {2/0/3.0/dcD1, 1/0/2.0/dcD3, 0/0/1.2/dcD2}{
-          \draw[\col,line width=4pt] (\bx,\y) -- (\dx,\y);
+          \draw[\col,line width=6pt,line cap=round] (\bx,\y) -- (\dx,\y);
         }
-        \node[right,font=\small] at (3.1,2) {\textcolor{dcD1}{$d_1$}: longest};
-        \node[right,font=\small] at (2.1,1) {\textcolor{dcD3}{$d_3$}};
-        \node[right,font=\small] at (1.3,0) {\textcolor{dcD2}{$d_2$}: shortest};
-        \draw[dcInk,dashed] (0,-0.4) -- (0,2.5) node[above,font=\small]{shared birth};
-      \end{tikzpicture}
+        \node[right,font=\large] at (3.1,2) {\textcolor{dcD1}{$d_1$}: longest};
+        \node[right,font=\large] at (2.1,1) {\textcolor{dcD3}{$d_3$}};
+        \node[right,font=\large] at (1.3,0) {\textcolor{dcD2}{$d_2$}: shortest};
+        \draw[dcInk,dashed,line width=1pt] (0,-0.45) -- (0,2.55) node[above,font=\normalsize]{shared birth};
+      \end{tikzpicture}\\[1.0ex]
+      \includegraphics[width=0.82\linewidth]{fig_persistence_diagram.pdf}\\[0.2ex]
+      {\normalsize On real music: \textcolor{dcD1}{$d_1$} points lie above
+       \textcolor{dcD2}{$d_2$} --- longer lifespans, shared births.}
     \end{block}
-    \vfill
     \begin{block}{Why it matters}
-      \normalsize The same piece yields \emph{different but nested} topological readings.
+      \large The same piece yields \emph{different but nested} topological readings.
       $\textcolor{dcD2}{d_2}$ exposes the robust core; $\textcolor{dcD1}{d_1}$ adds finer,
       peripheral loops. The changes are \textbf{systematic, not random}.
     \end{block}
-  \end{minipage}
   \end{column}
   % ---- COLUMN 3 ----
   \begin{column}{0.32\paperwidth}
-  \begin{minipage}[t][\colheight][s]{\linewidth}
     \begin{block}{Evidence on real music}
       \centering
       \includegraphics[width=\linewidth]{fig_distance_matrices.pdf}\\[0.3ex]
-      {\small Distance matrices: \textcolor{dcD2}{$d_2$} (cool/smooth) $\to$
-       \textcolor{dcD1}{$d_1$} (hot) --- the ordering is visible.}\\[0.8ex]
+      {\normalsize Distance matrices: \textcolor{dcD2}{$d_2$} (cool/smooth) $\to$
+       \textcolor{dcD1}{$d_1$} (hot) --- the ordering is visible.}\\[0.9ex]
       \includegraphics[width=\linewidth]{fig_barcodes.pdf}\\[0.3ex]
-      {\small $H_1$ barcodes: \textbf{7$\,/\,$4$\,/\,$3} bars for
+      {\normalsize $H_1$ barcodes: \textbf{7$\,/\,$4$\,/\,$3} bars for
        \textcolor{dcD1}{$d_1$}$/$\textcolor{dcD3}{$d_3$}$/$\textcolor{dcD2}{$d_2$};
        lifespans grow, births shared.}
     \end{block}
-    \vfill
     \begin{block}{Application: distilling the core}
-      \normalsize Ranking $\textcolor{dcD1}{d_1}$ cycles by how far down they survive
+      \large Ranking $\textcolor{dcD1}{d_1}$ cycles by how far down they survive
       ($\to\textcolor{dcD3}{d_3}\to\textcolor{dcD2}{d_2}$) gives a principled
       \textbf{importance hierarchy of musical loops} --- a multi-resolution descriptor of a piece.
     \end{block}
-    \vfill
     \begin{block}{Takeaways \& future work}
-      \normalsize
-      \begin{itemize}
+      \large
+      \begin{itemize}\setlength{\itemsep}{0.6ex}
         \item Distance choice $=$ a tunable lens; results are nested, not arbitrary.
         \item Toward \textbf{AI music composition} with multiple stylistic perspectives
-              from one source (distance-varied generation).
+              from one source.
       \end{itemize}
-      \vskip0.4ex\centering
-      \includegraphics[width=4.5cm]{qr_project.png}\\[0.2ex]
-      {\small Audio demos \& interactive explorer on the project page.}
+      \vskip0.5ex\centering
+      \includegraphics[width=5cm]{qr_project.png}\\[0.2ex]
+      {\normalsize Interactive explorer \& audio demos on the project page.}
     \end{block}
-  \end{minipage}
   \end{column}
 \end{columns}
 
 \vfill
 % ===================== FOOTER =====================
-\begin{beamercolorbox}[wd=\paperwidth,sep=0.8ex,leftskip=2ex,rightskip=2ex]{headline}
+\begin{beamercolorbox}[wd=\paperwidth,sep=0.9ex,leftskip=2ex,rightskip=2ex]{headline}
 \begin{columns}[c,onlytextwidth]
   \begin{column}{0.70\paperwidth}
-    {\color{dcPaper}\small Key refs: Heo--Choi--Jung (2024) arXiv:2501.03553; Tran--Park--Jung (2023) \emph{J.\ Math.\ Music}; Sethares--Budney (2014).
+    {\color{dcPaper}\normalsize Key refs: Heo--Choi--Jung (2024) arXiv:2501.03553; Tran--Park--Jung (2023) \emph{J.\ Math.\ Music}; Sethares--Budney (2014).
     \quad Funded by NRF Korea (2021R1A2C3009648) \& KIAS Transdisciplinary program.
     \quad Contact: hew0920@postech.ac.kr}
   \end{column}
   \begin{column}{0.27\paperwidth}\raggedleft
-    \includegraphics[height=4cm]{qr_arxiv.png}\;{\color{dcPaper}\small arXiv:2506.13595}
+    \includegraphics[height=5cm]{qr_arxiv.png}\;{\color{dcPaper}\normalsize arXiv:2506.13595}
   \end{column}
 \end{columns}
 \end{beamercolorbox}
