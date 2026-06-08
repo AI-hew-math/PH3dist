@@ -68,6 +68,9 @@
       \large Each \textbf{node} $=$ (pitch, duration); an \textbf{edge} joins consecutive notes;
       the \textbf{weight} is $1/(\text{co-occurrence count})$ --- frequent neighbors are closer.
       Rests are skipped.
+      \vskip0.6ex\centering
+      \includegraphics[width=0.86\linewidth]{fig_network.pdf}\\[0.2ex]
+      {\normalsize The music network of \emph{Sanghyeondodeuri} (geomungo).}
     \end{block}
     \begin{block}{Three path distances}
       \large For nodes $v,w$ on the music graph $M=(V,E,W)$:
@@ -141,6 +144,11 @@
       {\normalsize $H_1$ barcodes: \textbf{7$\,/\,$4$\,/\,$3} bars for
        \textcolor{dcD1}{$d_1$}$/$\textcolor{dcD3}{$d_3$}$/$\textcolor{dcD2}{$d_2$};
        lifespans grow, births shared.}
+    \end{block}
+    \begin{block}{Data \& validation}
+      \large Twelve Korean court pieces (\emph{geomungo} \& \emph{haegeum}) plus
+      \emph{Twinkle, Twinkle} variations. Our pipeline reproduces the paper's
+      Table~1 \textbf{exactly} --- same births, cycle counts, and inclusion relation.
     \end{block}
     \begin{block}{Application: distilling the core}
       \large Ranking $\textcolor{dcD1}{d_1}$ cycles by how far down they survive
