@@ -66,7 +66,22 @@
     $$\mathrm{bcd}_1(\textcolor{#C8443B}{d_2})\hookrightarrow\mathrm{bcd}_1(\textcolor{#E0A526}{d_3})\hookrightarrow\mathrm{bcd}_1(\textcolor{#3E8E7E}{d_1}).$$
     Every cycle keeps its birth time; its lifespan only grows from $d_2$ to $d_1$, and cycles can only be added.</p>
   </div></section>
-  <!-- EXPLORER (Task 3) -->
+  <section class="explorer"><div class="wrap">
+    <h2>Interactive explorer</h2>
+    <p>Pick a piece. For each distance you see its distance-matrix heatmap, $H_1$ barcode, and the
+    music network with surviving cycles highlighted. Watch cycles thin out
+    <span class="d1">$d_1$</span> $\to$ <span class="d3">$d_3$</span> $\to$ <span class="d2">$d_2$</span>.</p>
+    <div class="controls">
+      <label>Piece: <select id="song"></select></label>
+      <span id="counts"></span>
+    </div>
+    <h3>Distance matrices</h3>
+    <div id="viz-matrices" class="viz"></div>
+    <h3>$H_1$ barcodes</h3>
+    <div id="viz-barcodes" class="viz"></div>
+    <h3>Network &amp; surviving cycles</h3>
+    <div id="viz-networks" class="viz"></div>
+  </div></section>
   <!-- CYCLE SKELETON + FUTURE + CITE (Task 4) -->
   <script src="js/explorer.js"></script>
 </body>
