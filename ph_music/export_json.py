@@ -18,6 +18,8 @@ def export_song(name, outdir="web/data"):
         "nodes": [list(G.nodes[i]["label"]) for i in range(G.number_of_nodes())],
         "positions": [[round(float(pos[i][0]), 4), round(float(pos[i][1]), 4)]
                       for i in range(G.number_of_nodes())],
+        "edges": [[int(u), int(v), round(float(G[u][v]["weight"]), 5)]
+                  for u, v in G.edges()],
         "matrices": {k: [[round(float(x), 5) for x in row] for row in res["matrices"][k]]
                      for k in ("d1", "d2", "d3")},
         "persistence": {k: [{"birth": round(b["birth"], 5), "death": _fin(b["death"]),

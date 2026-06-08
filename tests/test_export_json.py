@@ -15,7 +15,7 @@ def test_infinite_death_serializes_to_null(tmp_path, monkeypatch):
     g = nx.Graph()
     g.add_node(0, label=("A", "1"))
     g.add_node(1, label=("B", "1"))
-    g.add_edge(0, 1)
+    g.add_edge(0, 1, weight=1.0)
     fake = {
         "graph": g,
         "matrices": {"d1": [[0, 1], [1, 0]], "d2": [[0, 1], [1, 0]], "d3": [[0, 1], [1, 0]]},
@@ -26,3 +26,10 @@ def test_infinite_death_serializes_to_null(tmp_path, monkeypatch):
     p = export_json.export_song("fake", outdir=str(tmp_path))
     data = json.load(open(p))
     assert data["persistence"]["d1"][0]["death"] is None
+
+def test_export_includes_edges(tmp_path):
+    p = export_song("01 J-Sangnyeongsan_Geomungo_part(0719)", outdir=str(tmp_path))
+    data = json.load(open(p))
+    assert "edges" in data and len(data["edges"]) > 0
+    u, v, w = data["edges"][0]
+    assert isinstance(u, int) and isinstance(v, int) and isinstance(w, (int, float))
