@@ -36,5 +36,5 @@ footer{padding:28px 0;text-align:center;font-size:.9rem;opacity:.8}
 .audio{display:flex;flex-direction:column;gap:14px;margin-top:8px}
 .audio .ap{background:var(--card);border-radius:10px;padding:12px 14px}
 .audio .lab{font-weight:700;margin-bottom:6px}
-.audio midi-player{width:100%;--media-control-background:var(--ink);--media-primary-color:var(--accent)}
+.audio audio{width:100%;margin-top:2px}
 @media(max-width:820px){.contribs,.viz{grid-template-columns:1fr}header.hero h1{font-size:1.7rem}}
