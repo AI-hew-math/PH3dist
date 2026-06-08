@@ -1,16 +1,22 @@
 from ph_music.verify import analyze_song
-from ph_music.compose import compose_stream
+from ph_music.compose import compose_stream, _base_notes
 
 SONG = "J-Sanghyeondodeuri_Geomungo_part"
 
-def test_d1_has_more_notes_than_d2():
+def test_base_d1_richer_than_d2():
     res = analyze_song(SONG)
-    n1 = len(compose_stream(res, "d1").notes)
-    n2 = len(compose_stream(res, "d2").notes)
-    assert n1 > n2 > 0     # d1 (7 cycles) sonifies more than d2 (3 cycles)
+    assert len(_base_notes(res, "d1")) > len(_base_notes(res, "d2")) > 0
+
+def test_clips_comparable_length():
+    res = analyze_song(SONG)
+    def total(k):
+        return sum(float(n.duration.quarterLength) for n in compose_stream(res, k).notesAndRests)
+    ts = [total(k) for k in ("d1", "d3", "d2")]
+    assert max(ts) / min(ts) < 1.4     # all three looped to a similar duration
 
 def test_notes_valid():
     res = analyze_song(SONG)
-    s = compose_stream(res, "d3")
-    for n in s.notes:
+    notes = list(compose_stream(res, "d3").notes)
+    assert len(notes) > 0
+    for n in notes:
         assert n.pitch is not None and n.duration.quarterLength > 0
