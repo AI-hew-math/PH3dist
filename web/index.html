@@ -11,9 +11,61 @@
   onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
 </head>
 <body>
-  <!-- HERO (Task 2) -->
-  <!-- ABSTRACT + CONTRIBUTIONS (Task 2) -->
-  <!-- METHOD + MAIN RESULT (Task 2) -->
+  <header class="hero">
+    <div class="wrap">
+      <h1>Persistent Homology of Music Network<br>with Three Different Distances</h1>
+      <div class="authors"><u>Eunwoo Heo</u><sup>1,2,*</sup>, Byeongchan Choi<sup>1,2</sup>,
+        Myungock Kim<sup>3</sup>, Mai Lan Tran<sup>1,2</sup>, Jae-Hun Jung<sup>1,2</sup></div>
+      <div class="aff"><sup>1</sup>Dept. of Mathematics, POSTECH &nbsp; <sup>2</sup>POSTECH MINDS &nbsp;
+        <sup>3</sup>KIAS &nbsp; <em>*Present address: UNIST, Ulsan, Korea</em></div>
+      <div class="btns">
+        <a class="btn" href="https://arxiv.org/abs/2506.13595">arXiv</a>
+        <a class="btn" href="https://arxiv.org/pdf/2506.13595">PDF</a>
+        <a class="btn" href="https://github.com/AI-hew-math/PH3dist">Code</a>
+        <a class="btn" href="#cite">BibTeX</a>
+      </div>
+    </div>
+  </header>
+
+  <section><div class="wrap">
+    <h2>Abstract</h2>
+    <p class="lead">Persistent homology (PH) reveals hidden topological structure in data, including music.
+    Applying PH requires a distance between graph nodes, and that choice is not unique. We study music graphs
+    with predefined weights and examine <strong>three path-based distances</strong>, showing how they reshape
+    persistence barcodes, diagrams, and birth/death edges. We prove an <strong>inclusion relation</strong> in
+    one-dimensional persistent homology among the three definitions and verify it on real Korean court music.</p>
+  </div></section>
+
+  <section><div class="wrap">
+    <h2>Key contributions</h2>
+    <div class="contribs">
+      <div class="c"><h3>Three distances</h3><p><span class="d1">$d_1$</span> min-edge path,
+        <span class="d2">$d_2$</span> min-weight path (the only metric),
+        <span class="d3">$d_3$</span> hybrid.</p></div>
+      <div class="c"><h3>Universal ordering</h3><p>$\textcolor{#C8443B}{d_2}\le\textcolor{#E0A526}{d_3}\le\textcolor{#3E8E7E}{d_1}$,
+        lifting to a barcode injection $B_2\subseteq B_3\subseteq B_1$.</p></div>
+      <div class="c"><h3>Validated</h3><p>Exactly reproduces the paper's Table 1 on real geomungo pieces.</p></div>
+    </div>
+  </div></section>
+
+  <section><div class="wrap">
+    <h2>From music to a graph</h2>
+    <p>Each <strong>node</strong> is a (pitch, duration) pair; an <strong>edge</strong> joins consecutive notes;
+    the <strong>weight</strong> is $1/(\text{co-occurrence count})$. On this graph we define three distances:</p>
+    <ul>
+      <li><span class="d1">$d_1$</span> — fewest-edge path (sum of its weights).</li>
+      <li><span class="d2">$d_2$</span> — least-total-weight path; the only one satisfying the triangle inequality.</li>
+      <li><span class="d3">$d_3$</span> — least weight <em>among</em> fewest-edge paths (a hybrid).</li>
+    </ul>
+  </div></section>
+
+  <section><div class="wrap">
+    <h2>Main result</h2>
+    <p>For every pair of nodes, $$\textcolor{#C8443B}{d_2(v,w)}\le\textcolor{#E0A526}{d_3(v,w)}\le\textcolor{#3E8E7E}{d_1(v,w)}.$$
+    This carries to one-dimensional persistent homology: the birth edges satisfy $B_2\subseteq B_3\subseteq B_1$, giving injections
+    $$\mathrm{bcd}_1(\textcolor{#C8443B}{d_2})\hookrightarrow\mathrm{bcd}_1(\textcolor{#E0A526}{d_3})\hookrightarrow\mathrm{bcd}_1(\textcolor{#3E8E7E}{d_1}).$$
+    Every cycle keeps its birth time; its lifespan only grows from $d_2$ to $d_1$, and cycles can only be added.</p>
+  </div></section>
   <!-- EXPLORER (Task 3) -->
   <!-- CYCLE SKELETON + FUTURE + CITE (Task 4) -->
   <script src="js/explorer.js"></script>
