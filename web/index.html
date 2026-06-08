@@ -9,6 +9,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0"></script>
 </head>
 <body>
   <header class="hero">
@@ -94,10 +95,22 @@
   </div></section>
 
   <section><div class="wrap">
+    <h2>Listen: sonifying the cycle skeleton</h2>
+    <p>Each distance's surviving $H_1$ cycles of <em>Sanghyeondodeuri</em> (geomungo), played back in birth order.
+    As $d_1\to d_3\to d_2$ the music distills to its core loops.</p>
+    <div class="audio">
+      <div class="ap"><div class="lab d1">$d_1$ — 7 cycles (full)</div><midi-player src="audio/d1.mid" sound-font></midi-player></div>
+      <div class="ap"><div class="lab d3">$d_3$ — 4 cycles</div><midi-player src="audio/d3.mid" sound-font></midi-player></div>
+      <div class="ap"><div class="lab d2">$d_2$ — 3 cycles (core)</div><midi-player src="audio/d2.mid" sound-font></midi-player></div>
+    </div>
+    <p style="font-size:.9rem;opacity:.75">Preliminary cycle sonification — the surviving loops sounded directly. Neural distance-varied composition (below) is ongoing.</p>
+  </div></section>
+
+  <section><div class="wrap">
     <h2>Future work — AI music composition</h2>
     <p>Different distances yield different but nested topological readings of the same piece. We are exploring
     distance-varied <strong>AI composition</strong>: generating pieces that imitate a source's topology under
-    each distance, for multiple stylistic perspectives. <em>Audio demos coming soon.</em></p>
+    each distance, for multiple stylistic perspectives. <em>Listen above for a first cycle-sonification demo.</em></p>
   </div></section>
 
   <section id="cite" class="cite"><div class="wrap">
