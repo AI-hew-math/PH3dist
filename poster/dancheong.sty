@@ -1,0 +1,33 @@
+\ProvidesPackage{dancheong}[2026/06/08 dancheong poster theme]
+\RequirePackage{tikz}
+\RequirePackage{xcolor}
+% --- Dancheong palette (must match ph_music/palette.py) ---
+\definecolor{dcD1}{HTML}{3E8E7E}   % jade green  - all cycles (d1)
+\definecolor{dcD3}{HTML}{E0A526}   % amber       - intermediate (d3)
+\definecolor{dcD2}{HTML}{C8443B}   % vermilion   - core skeleton (d2)
+\definecolor{dcInk}{HTML}{1A2238}  % deep navy   - text/headers
+\definecolor{dcPaper}{HTML}{FAF7F0}% hanji       - background
+\definecolor{dcAccent}{HTML}{7A1F2B}% maroon     - structure accents
+% --- beamer colors ---
+\setbeamercolor{background canvas}{bg=dcPaper}
+\setbeamercolor{normal text}{fg=dcInk}
+\setbeamercolor{structure}{fg=dcAccent}
+\setbeamercolor{block title}{bg=dcInk,fg=dcPaper}
+\setbeamercolor{block body}{bg=white,fg=dcInk}
+\setbeamercolor{headline}{bg=dcInk,fg=dcPaper}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\small\textcolor{dcAccent}{\textbullet}}
+\setbeamertemplate{itemize subitem}{\textcolor{dcD2}{--}}
+% rounded blocks with a colored title bar
+\setbeamertemplate{block begin}{
+  \begin{beamercolorbox}[colsep*=0ex,dp=0.4ex,center,rounded=true]{block title}
+    \vskip0.4ex{\usebeamerfont{block title}\large\bfseries\insertblocktitle}\vskip0.3ex
+  \end{beamercolorbox}
+  \vskip-0.3ex
+  \begin{beamercolorbox}[sep=0.6ex,vmode,rounded=true]{block body}
+  \vskip0.2ex}
+\setbeamertemplate{block end}{\vskip0.3ex\end{beamercolorbox}\vskip1.2ex}
+% helper: distance-colored math symbols
+\newcommand{\done}{\textcolor{dcD1}{$d_1$}}
+\newcommand{\dtwo}{\textcolor{dcD2}{$d_2$}}
+\newcommand{\dthree}{\textcolor{dcD3}{$d_3$}}
