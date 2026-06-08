@@ -82,7 +82,39 @@
     <h3>Network &amp; surviving cycles</h3>
     <div id="viz-networks" class="viz"></div>
   </div></section>
-  <!-- CYCLE SKELETON + FUTURE + CITE (Task 4) -->
+  <section><div class="wrap">
+    <h2>Cycle skeleton extraction</h2>
+    <p>On <em>Sanghyeondodeuri</em> (geomungo), sweeping the distance distills the piece from
+    <strong>$7\to4\to3$</strong> cycles — only the robust core loops survive.</p>
+    <div class="viz">
+      <figure><img src="assets/signature_d1.png" alt="d1 cycles"><figcaption><span class="d1">$d_1$</span> — 7 cycles</figcaption></figure>
+      <figure><img src="assets/signature_d3.png" alt="d3 cycles"><figcaption><span class="d3">$d_3$</span> — 4 cycles</figcaption></figure>
+      <figure><img src="assets/signature_d2.png" alt="d2 cycles"><figcaption><span class="d2">$d_2$</span> — 3 cycles (core)</figcaption></figure>
+    </div>
+  </div></section>
+
+  <section><div class="wrap">
+    <h2>Future work — AI music composition</h2>
+    <p>Different distances yield different but nested topological readings of the same piece. We are exploring
+    distance-varied <strong>AI composition</strong>: generating pieces that imitate a source's topology under
+    each distance, for multiple stylistic perspectives. <em>Audio demos coming soon.</em></p>
+  </div></section>
+
+  <section id="cite" class="cite"><div class="wrap">
+    <h2>Citation</h2>
+    <pre>@article{heo2025ph_music,
+  title  = {Persistent Homology of Music Network with Three Different Distances},
+  author = {Heo, Eunwoo and Choi, Byeongchan and Kim, Myungock and Tran, Mai Lan and Jung, Jae-Hun},
+  journal= {arXiv preprint arXiv:2506.13595},
+  year   = {2025}
+}</pre>
+  </div></section>
+
+  <footer><div class="wrap">
+    Funded by NRF Korea (2021R1A2C3009648) &amp; the KIAS Transdisciplinary program. &middot;
+    <a href="https://arxiv.org/abs/2506.13595">arXiv:2506.13595</a> &middot;
+    <a href="https://github.com/AI-hew-math/PH3dist">Code</a>
+  </div></footer>
   <script src="js/explorer.js"></script>
 </body>
 </html>
