@@ -33,8 +33,47 @@
 \end{beamercolorbox}
 \vskip1.2ex
 
-% ===================== CONTENT (Tasks 3-6) =====================
-% (hero strip + 3 columns inserted here)
+% ===================== CONTENT =====================
+% ---------- HERO STRIP ----------
+\begin{columns}[t]
+  \begin{column}{0.40\paperwidth}
+    \begin{block}{The big idea}
+      \large
+      Distance is a \textbf{tunable resolution knob} on musical structure.
+      Sweeping \done${}\to{}$\dthree${}\to{}$\dtwo\ distills a piece down to its
+      \textbf{core cyclic skeleton}.\par\vskip0.6ex
+      \normalsize
+      \begin{itemize}
+        \item Three path distances on the music graph: \done\ (min edges),
+              \dtwo\ (min weight, the only metric), \dthree\ (hybrid).
+        \item Proven ordering \;$\textcolor{dcD2}{d_2}\!\le\!\textcolor{dcD3}{d_3}\!\le\!\textcolor{dcD1}{d_1}$\;
+              and barcode injection $B_2\!\subseteq\!B_3\!\subseteq\!B_1$.
+        \item Validated on real Korean court music (exact match to the paper's results).
+      \end{itemize}
+    \end{block}
+  \end{column}
+  \begin{column}{0.59\paperwidth}
+    \begin{block}{Cycle skeleton extraction \;\textmd{(Sanghyeondodeuri, geomungo)}}
+      \centering
+      \includegraphics[width=\linewidth]{signature.pdf}\\[0.3ex]
+      {\normalsize As \done${}\to{}$\dthree${}\to{}$\dtwo, cycles vanish
+      \textbf{7$\,\to\,$4$\,\to\,$3}: only the robust core loops survive.}
+    \end{block}
+  \end{column}
+\end{columns}
+\vskip0.6ex
+% ---------- 3 CONTENT COLUMNS ----------
+\begin{columns}[t]
+  \begin{column}{0.32\paperwidth}
+    % === COLUMN 1 (Task 4) ===
+  \end{column}
+  \begin{column}{0.32\paperwidth}
+    % === COLUMN 2 (Task 5) ===
+  \end{column}
+  \begin{column}{0.32\paperwidth}
+    % === COLUMN 3 (Task 6) ===
+  \end{column}
+\end{columns}
 
 \vfill
 % ===================== FOOTER =====================
