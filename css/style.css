@@ -18,6 +18,8 @@ header.hero .aff{font-size:.9rem;opacity:.85}
 .btn:hover{filter:brightness(1.12)}
 section{padding:34px 0;border-bottom:1px solid #e7e2d8}
 section h2{font-size:1.6rem;margin:0 0 14px;color:var(--ink)}
+section h3{font-size:1.15rem;margin:20px 0 4px;color:var(--ink)}
+.cap{font-size:.92rem;opacity:.82;margin:.1rem 0 .7rem}
 .lead{font-size:1.12rem}
 .contribs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .contribs .c{background:var(--card);border-radius:12px;padding:16px;border-top:5px solid var(--accent)}
