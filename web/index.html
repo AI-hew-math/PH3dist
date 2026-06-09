@@ -103,16 +103,40 @@
       <div class="ap"><div class="lab d3">$d_3$ — 4 cycles</div><audio controls preload="none" src="audio/d3.mp3"></audio></div>
       <div class="ap"><div class="lab d2">$d_2$ — 3 cycles (core)</div><audio controls preload="none" src="audio/d2.mp3"></audio></div>
     </div>
-    <p style="font-size:.9rem;opacity:.75">Preliminary cycle sonification — the surviving loops sounded directly with real
-    geomungo samples (<a href="https://www.gugak.go.kr/digitaleum/">National Gugak Center · Digitaleum</a>, KOGL Type&#8209;1).
-    Neural distance-varied composition (below) is ongoing.</p>
+    <p style="font-size:.9rem;opacity:.75">Direct cycle sonification — the surviving loops sounded as-is with real
+    geomungo samples (<a href="https://www.gugak.go.kr/digitaleum/">National Gugak Center · Digitaleum</a>, KOGL Type-1).
+    Below, the same cycles drive actual <em>composition</em>.</p>
   </div></section>
 
   <section><div class="wrap">
-    <h2>Future work — AI music composition</h2>
-    <p>Different distances yield different but nested topological readings of the same piece. We are exploring
-    distance-varied <strong>AI composition</strong>: generating pieces that imitate a source's topology under
-    each distance, for multiple stylistic perspectives. <em>Listen above for a first cycle-sonification demo.</em></p>
+    <h2>Distance-varied AI composition</h2>
+    <p>Beyond replaying the cycles, we <strong>compose new geomungo pieces from the cycle structure</strong>,
+    following the two TDA composition algorithms of
+    <a href="https://arxiv.org/abs/2203.15468">Tran, Lee &amp; Jung (2024)</a> — run <em>separately for each distance</em>.
+    A different distance gives different surviving cycles and a different "overlap" timeline, so the same machinery
+    composes a <strong>different piece per distance</strong>: distance is a knob on the composition itself.</p>
+
+    <h3>Algorithm A — direct TDA sampling</h3>
+    <p class="cap">At each step, sample a note from the cycles surviving there; where none survive, from a
+    frequency-weighted node pool with neighbour constraints. No training.</p>
+    <div class="audio">
+      <div class="ap"><div class="lab d1">$d_1$ — 7 cycles</div><audio controls preload="none" src="audio/compA_d1.mp3"></audio></div>
+      <div class="ap"><div class="lab d3">$d_3$ — 4 cycles</div><audio controls preload="none" src="audio/compA_d3.mp3"></audio></div>
+      <div class="ap"><div class="lab d2">$d_2$ — 3 cycles</div><audio controls preload="none" src="audio/compA_d2.mp3"></audio></div>
+    </div>
+
+    <h3>Algorithm B — neural (ANN / MLP)</h3>
+    <p class="cap">An MLP learns to map the Overlap matrix to the note sequence from the single piece
+    (periodic-extension training), then composes from a generated seed Overlap matrix.</p>
+    <div class="audio">
+      <div class="ap"><div class="lab d1">$d_1$ — 7 cycles</div><audio controls preload="none" src="audio/compB_d1.mp3"></audio></div>
+      <div class="ap"><div class="lab d3">$d_3$ — 4 cycles</div><audio controls preload="none" src="audio/compB_d3.mp3"></audio></div>
+      <div class="ap"><div class="lab d2">$d_2$ — 3 cycles</div><audio controls preload="none" src="audio/compB_d2.mp3"></audio></div>
+    </div>
+    <p style="font-size:.9rem;opacity:.75">~1-min excerpts. Algorithms: Tran, Lee &amp; Jung,
+    <em>Machine Composition of Korean Music via TDA and ANN</em>, J. Math. Music 18(1):20–41, 2024
+    (arXiv:2203.15468) — here generalized to the three distances. Rendered with real geomungo samples
+    (<a href="https://www.gugak.go.kr/digitaleum/">National Gugak Center · Digitaleum</a>, KOGL Type-1).</p>
   </div></section>
 
   <section id="cite" class="cite"><div class="wrap">
