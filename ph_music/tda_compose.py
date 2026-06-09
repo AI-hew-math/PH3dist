@@ -112,10 +112,17 @@ def _seed_overlap_int(M_bin, M_int, cyc_sets, seed):
     return out
 
 
-def algorithm_b(res, distance_key, song, s=2, seed=0, epochs=500, hidden=256):
+def algorithm_b(res, distance_key, song, s=2, seed=0, epochs=500, hidden=256,
+                temperature=1.0):
     """ANN composition (Tran-Lee-Jung Section 5): MLP learns Overlap matrix -> note
     sequence from the one seed piece, then composes from a generated seed matrix.
-    Returns node-index list of length d."""
+    Returns node-index list of length d.
+
+    Distance-sensitive decoding: at positions where a cycle survives ("anchored"),
+    keep the learned note (argmax); elsewhere ("free") sample from the softmax at
+    `temperature`.  Distances with fewer surviving positions (d2 < d3 < d1) therefore
+    improvise at more positions, so the three pieces diverge audibly even though the
+    network is trained on one seed melody.  temperature<=0 reproduces pure argmax."""
     import torch
     import torch.nn as nn
     torch.manual_seed(seed)
@@ -162,11 +169,21 @@ def algorithm_b(res, distance_key, song, s=2, seed=0, epochs=500, hidden=256):
         opt.step()
 
     seed_mat = _seed_overlap_int(M_bin, M_int, cyc_sets, seed)
+    surv_pos = (seed_mat >= 0).any(axis=0)          # anchored where a cycle survives
     xs = torch.tensor(encode(seed_mat)[None, :], dtype=torch.float32)
     with torch.no_grad():
-        logits = net(xs).view(d, q)
-        cols = torch.argmax(logits, dim=1).numpy()
-    return [nodes[c] for c in cols]
+        logits = net(xs).view(d, q).numpy()
+    rng = np.random.default_rng(seed + 13)
+    cols = np.empty(d, dtype=int)
+    for j in range(d):
+        if surv_pos[j] or temperature <= 0:         # cycle-anchored: keep the learned note
+            cols[j] = int(np.argmax(logits[j]))
+        else:                                       # free position: improvise
+            z = logits[j] / temperature
+            z = z - z.max()
+            p = np.exp(z); p = p / p.sum()
+            cols[j] = int(rng.choice(q, p=p))
+    return [nodes[int(c)] for c in cols]
 
 
 # ----------------------------- to renderable notes -----------------------------

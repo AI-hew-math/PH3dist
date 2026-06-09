@@ -18,11 +18,12 @@ SONG = "J-Sanghyeondodeuri_Geomungo_part"
 S = 2            # s-scale for the Overlap matrix (proportionate to the paper's 4 at d=440)
 N = 56           # demo excerpt length in notes (~1 min)
 SEED = 0
+TEMP_B = 6.0     # Algorithm B free-position softmax temperature (cycle-anchored steps stay fixed)
 
 res = analyze_song(SONG)
 for dk in ["d1", "d3", "d2"]:
     a = indices_to_notes(res, algorithm_a(res, dk, SONG, s=S, seed=SEED))[:N]
     render_sequence_mp3(a, SAMPLES, os.path.join(OUT, f"compA_{dk}.mp3"))
-    b = indices_to_notes(res, algorithm_b(res, dk, SONG, s=S, seed=SEED, epochs=500))[:N]
+    b = indices_to_notes(res, algorithm_b(res, dk, SONG, s=S, seed=SEED, epochs=500, temperature=TEMP_B))[:N]
     render_sequence_mp3(b, SAMPLES, os.path.join(OUT, f"compB_{dk}.mp3"))
     print("composed + rendered", dk)

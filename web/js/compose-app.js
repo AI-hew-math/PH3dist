@@ -160,8 +160,28 @@
       const nodes = [...cyc[i]].sort((a, b) => a - b);
       for (let j = 0; j < d; j++) { const val = surv[i][j] ? nodes[Math.floor(r() * nodes.length)] : -1; sv[i * d + j] = (val + 1) / q; }
     }
-    const out = tf.tidy(() => model.apply(tf.tensor2d([Array.from(sv)])).reshape([d, q]).argMax(1).arraySync());
+    const TEMP_B = 6;                                   // free-position softmax temperature
+    const logits = tf.tidy(() => model.apply(tf.tensor2d([Array.from(sv)])).reshape([d, q]).arraySync());
     xs.dispose(); ys.dispose(); model.dispose();
+    const r2 = TDA.rng(seed + 13);
+    const out = new Array(d);
+    for (let j = 0; j < d; j++) {
+      const row = logits[j];
+      const anchored = surv.some((rw) => rw[j]);        // a cycle survives here -> keep the learned note
+      if (anchored) {
+        let bi = 0, bv = row[0];
+        for (let c = 1; c < q; c++) if (row[c] > bv) { bv = row[c]; bi = c; }
+        out[j] = bi;
+      } else {                                          // free position -> improvise (temperature sampling)
+        let mx = row[0];
+        for (let c = 1; c < q; c++) if (row[c] > mx) mx = row[c];
+        let sum = 0; const p = new Array(q);
+        for (let c = 0; c < q; c++) { p[c] = Math.exp((row[c] - mx) / TEMP_B); sum += p[c]; }
+        let x = r2() * sum, acc = 0, pick = q - 1;
+        for (let c = 0; c < q; c++) { acc += p[c]; if (x <= acc) { pick = c; break; } }
+        out[j] = pick;
+      }
+    }
     return out;
   }
 
