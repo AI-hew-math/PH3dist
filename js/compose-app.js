@@ -1,6 +1,6 @@
 /* "Compose from your own piece" — fully client-side.
    Parse MIDI/MusicXML (durations snapped to a musical grid) -> TDA pipeline (web/js/tda.js)
-   -> Algorithm B (ANN, TensorFlow.js, trained in-browser) -> play on a selectable gugak instrument (Web Audio). */
+   -> Algorithm B (MLP, TensorFlow.js, trained in-browser) -> play on a selectable gugak instrument (Web Audio). */
 (function () {
   "use strict";
   const ORDER = ["d1", "d3", "d2"];
@@ -10,7 +10,7 @@
     pitchClasses: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] };
   const DEFAULT_INSTR = { geomungo: { label: "거문고 Geomungo", sustained: false, pitchClasses: [0, 1, 2, 3, 4, 5, 7, 8, 10], midis: [39, 41, 44, 46, 48, 49, 51, 53, 55, 56, 58, 60, 62, 63, 65, 67] }, piano: PIANO };
   const RANGE_TOL = 5;        // a note > this many semitones from any sample => "not on this instrument" -> piano
-  const CAP = 200;            // cap input length (keeps PH + ANN fast)
+  const CAP = 200;            // cap input length (keeps PH + model fast)
   const EXCERPT = 56;         // playback excerpt length (notes)
   const $ = (id) => document.getElementById(id);
   const status = (m) => { const e = $("tryStatus"); if (e) e.textContent = m; };
@@ -271,7 +271,7 @@
       try {
         res = TDA.analyze(song);
         render(name);
-        status("done — cycles " + ORDER.map((k) => res[k].length).join("→") + "  ·  now train the ANN to compose");
+        status("done — cycles " + ORDER.map((k) => res[k].length).join("→") + "  ·  now train to compose");
       } catch (e) { status("error: " + e.message); }
     }, 15);
   }
@@ -301,15 +301,15 @@
       rows.appendChild(row);
     }
     box.appendChild(rows);
-    const bar = document.createElement("div"); bar.style.cssText = "display:flex;gap:10px;flex-wrap:wrap;margin-top:6px";
+    const bar = document.createElement("div"); bar.style.cssText = "display:flex;gap:10px;flex-wrap:wrap";
     const train = document.createElement("button");
     train.className = "btn"; train.textContent = "Start training now!";
     train.onclick = () => trainB(train); bar.appendChild(train);
     const reset = document.createElement("button");
     reset.className = "btn ghost"; reset.textContent = "↺ Reset";
-    reset.onclick = () => { stopPlayback(); song = null; res = null; comps = { B: {} }; box.innerHTML = ""; status("cleared — pick a preset or upload a file"); updateInstrWarning(); };
+    reset.onclick = () => { stopPlayback(); song = null; res = null; comps = { B: {} }; box.innerHTML = ""; const a = $("tryActions"); if (a) a.innerHTML = ""; status("cleared — pick a preset or upload a file"); updateInstrWarning(); };
     bar.appendChild(reset);
-    box.appendChild(bar);
+    const actions = $("tryActions"); if (actions) { actions.innerHTML = ""; actions.appendChild(bar); } else box.appendChild(bar);
     updateInstrWarning();
   }
 
@@ -317,7 +317,7 @@
     if (typeof tf === "undefined") { status("TensorFlow.js not loaded"); return; }
     btn.disabled = true; const N = Math.min(EXCERPT, song.length);
     for (const k of ORDER) {
-      status("training the ANN for " + k.toUpperCase() + "…");
+      status("training for " + k.toUpperCase() + "…");
       try {
         const seq = await algorithmB(k, 2, 0, 200);
         comps.B[k] = TDA.indicesToNotes(res, seq).slice(0, N);
@@ -326,7 +326,7 @@
       } catch (e) { status("Algorithm B error: " + e.message); btn.disabled = false; return; }
       await new Promise((r) => setTimeout(r, 5));
     }
-    status("ANN composition ready — ▶ to play");
+    status("composition ready — ▶ to play");
     btn.disabled = false;
   }
 
