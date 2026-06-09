@@ -5,10 +5,10 @@
   "use strict";
   const ORDER = ["d1", "d3", "d2"];
   const DCOL = { d1: "#3E8E7E", d3: "#E0A526", d2: "#C8443B" };
-  const PIANO = { label: "피아노 Piano", full: true, sustained: false, ext: "mp3",   // real samples (Salamander Grand Piano, CC-BY); plays any pitch
+  const PIANO = { label: "Piano (피아노)", full: true, sustained: false, ext: "mp3",   // real samples (Salamander Grand Piano, CC-BY); plays any pitch
     midis: [36, 39, 42, 45, 48, 51, 54, 57, 60, 63, 66, 69, 72, 75, 78, 81, 84, 87, 90, 93, 96],
     pitchClasses: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] };
-  const DEFAULT_INSTR = { geomungo: { label: "거문고 Geomungo", sustained: false, pitchClasses: [0, 1, 2, 3, 4, 5, 7, 8, 10], midis: [39, 41, 44, 46, 48, 49, 51, 53, 55, 56, 58, 60, 62, 63, 65, 67] }, piano: PIANO };
+  const DEFAULT_INSTR = { geomungo: { label: "Geomungo (거문고)", sustained: false, pitchClasses: [0, 1, 2, 3, 4, 5, 7, 8, 10], midis: [39, 41, 44, 46, 48, 49, 51, 53, 55, 56, 58, 60, 62, 63, 65, 67] }, piano: PIANO };
   const RANGE_TOL = 5;        // a note > this many semitones from any sample => "not on this instrument" -> piano
   const CAP = 200;            // cap input length (keeps PH + model fast)
   const EXCERPT = 56;         // playback excerpt length (notes)
@@ -56,7 +56,7 @@
     const el = $("instrWarn"); if (!el) return;
     if (songOutOfInstrument()) {
       const lbl = (instruments[curInst] && instruments[curInst].label) || curInst;
-      el.textContent = "⚠ 선택한 악기(" + lbl + ")에 없는 음이 있어, 그 음으로 학습한 선율은 피아노로 연주됩니다.  —  Some pitches aren't on this instrument, so the trained melody is played on piano.";
+      el.textContent = "⚠ " + lbl + " doesn't have some of these pitches, so the trained melody is played on piano instead.";
       el.style.cssText = "background:#fff7e6;border-left:3px solid var(--d3);padding:8px 12px;border-radius:6px;margin:8px 0";
     } else { el.textContent = ""; el.style.cssText = ""; }
   }
