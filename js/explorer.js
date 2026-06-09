@@ -1,5 +1,5 @@
 const DCOL = {d1:"#3E8E7E", d3:"#E0A526", d2:"#C8443B"};
-const ORDER = ["d2","d3","d1"];   // display order: core -> all
+const ORDER = ["d1","d3","d2"];   // d1 -> d3 -> d2 (distill 7->4->3), consistent with the rest of the page
 const INK = "#1A2238";
 
 function heatColor(t){ // blue (low) -> hanji -> vermilion (high)

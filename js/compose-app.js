@@ -4,6 +4,7 @@
 (function () {
   "use strict";
   const ORDER = ["d1", "d3", "d2"];
+  const DCOL = { d1: "#3E8E7E", d3: "#E0A526", d2: "#C8443B" };
   const SAMPLE_MIDIS = [39, 41, 44, 46, 48, 49, 51, 53, 55, 56, 58, 60, 62, 63, 65, 67];
   const CAP = 200;            // cap input length (keeps PH + ANN fast)
   const EXCERPT = 56;         // playback excerpt length (notes)
@@ -24,6 +25,12 @@
     let ql = label[1];
     if (typeof ql !== "number") { const p = String(ql).split("/"); ql = p.length === 2 ? (+p[0]) / (+p[1]) : parseFloat(ql); }
     return [midi, ql || 1];
+  }
+  function rollWrap(tag, labelNotes, color) {
+    const w = document.createElement("div"); w.className = "rollwrap";
+    const t = document.createElement("span"); t.className = "rolltag"; t.textContent = tag; w.appendChild(t);
+    if (window.pianoRoll) w.appendChild(window.pianoRoll((labelNotes || []).map(noteMidiQL), color));
+    return w;
   }
 
   let ctx = null, buffers = {}, presets = {}, song = null, res = null;
@@ -184,13 +191,17 @@
     const SUB = { d1: "₁", d3: "₃", d2: "₂" };
     for (const k of ORDER) {
       const row = document.createElement("div"); row.className = "tryrow";
+      const head = document.createElement("div"); head.className = "tryhead";
       const lab = document.createElement("span"); lab.className = "lab " + k;
-      lab.textContent = "d" + SUB[k] + " — " + res[k].length + " cycles"; row.appendChild(lab);
+      lab.textContent = "d" + SUB[k] + " — " + res[k].length + " cycles"; head.appendChild(lab);
       const a = document.createElement("button"); a.className = "btn small"; a.textContent = "▶ Algorithm A";
-      a.onclick = () => toggle("A:" + k, comps.A[k], a); row.appendChild(a);
+      a.onclick = () => toggle("A:" + k, comps.A[k], a); head.appendChild(a);
       const b = document.createElement("button"); b.className = "btn small ghost"; b.id = "bbtn_" + k;
       b.textContent = "▶ Algorithm B"; b.disabled = true;
-      b.onclick = () => { if (comps.B[k]) toggle("B:" + k, comps.B[k], b); }; row.appendChild(b);
+      b.onclick = () => { if (comps.B[k]) toggle("B:" + k, comps.B[k], b); }; head.appendChild(b);
+      row.appendChild(head);
+      row.appendChild(rollWrap("A", comps.A[k], DCOL[k]));
+      const bh = document.createElement("div"); bh.id = "rollB_" + k; row.appendChild(bh);
       rows.appendChild(row);
     }
     box.appendChild(rows);
@@ -214,6 +225,7 @@
         const seq = await algorithmB(k, 2, 0, 200);
         comps.B[k] = TDA.indicesToNotes(res, seq).slice(0, N);
         const bb = $("bbtn_" + k); if (bb) bb.disabled = false;
+        const bh = $("rollB_" + k); if (bh) { bh.innerHTML = ""; bh.appendChild(rollWrap("B", comps.B[k], DCOL[k])); }
       } catch (e) { status("Algorithm B error: " + e.message); btn.disabled = false; return; }
       await new Promise((r) => setTimeout(r, 5));
     }
