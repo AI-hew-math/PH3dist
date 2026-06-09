@@ -7,7 +7,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 from ph_music.verify import analyze_song
 from ph_music.compose import compose_stream
-from ph_music.tda_compose import algorithm_a, algorithm_b, indices_to_notes
+from ph_music.tda_compose import algorithm_b, indices_to_notes
 
 SONG = "J-Sanghyeondodeuri_Geomungo_part"
 N = 28
@@ -26,8 +26,7 @@ clips = {}
 for k in ["d1", "d3", "d2"]:                              # Listen: cycle sonification
     s = compose_stream(res, k)
     clips[k] = [[int(round(n.pitch.midi)), round(float(n.duration.quarterLength), 3)] for n in s.notes][:N]
-for k in ["d1", "d3", "d2"]:                              # composed pieces
-    clips["compA_" + k] = to_midiql(indices_to_notes(res, algorithm_a(res, k, SONG, s=2, seed=0)))
+for k in ["d1", "d3", "d2"]:                              # composed pieces (ANN)
     clips["compB_" + k] = to_midiql(indices_to_notes(res, algorithm_b(res, k, SONG, s=2, seed=0, epochs=500, temperature=6.0)))
 
 json.dump(clips, open(os.path.join(ROOT, "web", "data", "clip_notes.json"), "w"))

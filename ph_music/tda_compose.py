@@ -1,20 +1,15 @@
-"""Machine composition from the PH cycle structure, following Tran-Lee-Jung (2024),
-arXiv:2203.15468 — adapted to the three distances d1/d2/d3 of this project.
+"""Machine composition from the PH cycle structure, following the ANN method
+(Algorithm B) of Tran-Lee-Jung (2024), arXiv:2203.15468 — adapted to the three
+distances d1/d2/d3 of this project.
 
 The seed piece's surviving H1 cycles + its note timeline give an "Overlap matrix"
 M^s (cycle x time): cycle Ci "survives" at a position when >=s consecutive notes there
-all belong to Ci.  Two composition algorithms generate a new length-d piece:
-
-  Algorithm A (Section 4): direct, no learning.  At each position, if cycles survive
-    there, sample a note from the intersection of the surviving cycles' node sets;
-    otherwise sample from a frequency-weighted node pool with neighbour constraints.
-
-  Algorithm B (Section 5): an MLP learns p(note-sequence | Overlap matrix) from the one
-    seed piece (periodic-extension data augmentation), then composes from a generated
-    seed Overlap matrix (#2 Element-by-Element variant here).
-
-Because d1/d2/d3 yield different cycles, both algorithms produce a different piece per
-distance — distance is a tunable knob on the composition.
+all belong to Ci.  An MLP learns p(note-sequence | Overlap matrix) from the one seed
+piece (periodic-extension data augmentation), then composes from a generated seed
+Overlap matrix (#2 Element-by-Element variant).  Decoding keeps the learned note at
+cycle-anchored positions and temperature-samples the free positions, so distances with
+fewer surviving cycles (d2 < d3 < d1) improvise more — distance is a tunable knob on
+the composition.
 """
 import numpy as np
 from ph_music import data_io
@@ -60,45 +55,6 @@ def overlap_matrices(res, distance_key, timeline, s):
     return cycles, cyc_sets, M_bin, M_int
 
 
-def _surviving_sets(M_bin, cyc_sets, d):
-    """Per position j: (set of surviving cycle indices S_j, intersection node-set I_j)."""
-    S, I = [], []
-    for j in range(d):
-        sj = set(np.where(M_bin[:, j] > 0)[0]) if M_bin.size else set()
-        S.append(sj)
-        if sj:
-            inter = set.intersection(*[cyc_sets[i] for i in sj])
-            I.append(inter or set.union(*[cyc_sets[i] for i in sj]))
-        else:
-            I.append(set())
-    return S, I
-
-
-# ----------------------------- Algorithm A -----------------------------
-def algorithm_a(res, distance_key, song, s=2, seed=0):
-    """Direct algorithmic composition (Tran-Lee-Jung Section 4). Returns node-index list."""
-    G = res["graph"]
-    tl = timeline_indices(song, G)
-    d = len(tl)
-    _, cyc_sets, M_bin, _ = overlap_matrices(res, distance_key, tl, s)
-    S, I = _surviving_sets(M_bin, cyc_sets, d)
-    pool = list(tl)                         # node v appears f_v times => prob f_v/d
-    rng = np.random.default_rng(seed)
-    out = []
-    for j in range(d):
-        if S[j]:
-            out.append(int(rng.choice(sorted(I[j]))))
-        else:
-            forbidden = set()
-            if j > 0 and S[j - 1]:
-                forbidden |= I[j - 1]
-            if j < d - 1 and S[j + 1]:
-                forbidden |= I[j + 1]
-            choices = [p for p in pool if p not in forbidden] or pool
-            out.append(int(rng.choice(choices)))
-    return out
-
-
 # ----------------------------- Algorithm B (ANN) -----------------------------
 def _seed_overlap_int(M_bin, M_int, cyc_sets, seed):
     """Element-by-Element seed Overlap matrix (#2): keep the binary pattern, resample the
@@ -135,8 +91,8 @@ def algorithm_b(res, distance_key, song, s=2, seed=0, epochs=500, hidden=256,
     q = len(nodes)
     cycles, cyc_sets, M_bin, M_int = overlap_matrices(res, distance_key, tl, s)
     k = M_int.shape[0]
-    if k == 0:                              # no cycles survive -> fall back to Algorithm A
-        return algorithm_a(res, distance_key, song, s=s, seed=seed)
+    if k == 0:                              # no cycles survive -> nothing to learn; replay the piece
+        return list(tl)
 
     def encode(mat):                        # k x d int(node idx or -1) -> normalized k*d vector
         v = np.where(mat >= 0, np.vectorize(lambda x: node2col.get(x, -1))(mat), -1).astype(np.float32)

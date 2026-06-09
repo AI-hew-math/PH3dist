@@ -111,21 +111,12 @@
     <h2>Distance-varied AI composition</h2>
     <p>Beyond replaying the cycles, we <strong>compose new geomungo pieces from the cycle structure</strong> of
     <em>Sanghyeondodeuri</em> (geomungo) — the same 189-note seed piece analysed above (7&#8202;/&#8202;4&#8202;/&#8202;3 cycles) —
-    following the two TDA composition algorithms of
+    following the ANN composition algorithm (Algorithm B) of
     <a href="https://arxiv.org/abs/2203.15468">Tran, Lee &amp; Jung (2024)</a>, run <em>separately for each distance</em>.
     A different distance gives different surviving cycles and a different "overlap" timeline, so the same machinery
     composes a <strong>different piece per distance</strong>: distance is a knob on the composition itself.</p>
 
-    <h3>Algorithm A — direct TDA sampling</h3>
-    <p class="cap">At each step, sample a note from the cycles surviving there; where none survive, from a
-    frequency-weighted node pool with neighbour constraints. No training.</p>
-    <div class="audio">
-      <div class="ap"><div class="lab d1">$d_1$ — 7 cycles</div><audio controls preload="none" src="audio/compA_d1.mp3" data-roll="compA_d1"></audio></div>
-      <div class="ap"><div class="lab d3">$d_3$ — 4 cycles</div><audio controls preload="none" src="audio/compA_d3.mp3" data-roll="compA_d3"></audio></div>
-      <div class="ap"><div class="lab d2">$d_2$ — 3 cycles</div><audio controls preload="none" src="audio/compA_d2.mp3" data-roll="compA_d2"></audio></div>
-    </div>
-
-    <h3>Algorithm B — neural (ANN / MLP)</h3>
+    <h3>Neural composition (ANN / MLP)</h3>
     <p class="cap">An MLP learns to map the Overlap matrix to the note sequence from the single piece
     (periodic-extension training), then composes from a generated seed Overlap matrix.
     Steps anchored by a surviving cycle keep the learned note; the gaps improvise — so
@@ -135,7 +126,7 @@
       <div class="ap"><div class="lab d3">$d_3$ — 4 cycles</div><audio controls preload="none" src="audio/compB_d3.mp3" data-roll="compB_d3"></audio></div>
       <div class="ap"><div class="lab d2">$d_2$ — 3 cycles</div><audio controls preload="none" src="audio/compB_d2.mp3" data-roll="compB_d2"></audio></div>
     </div>
-    <p style="font-size:.9rem;opacity:.75">~1-min excerpts. Algorithms: Tran, Lee &amp; Jung,
+    <p style="font-size:.9rem;opacity:.75">~1-min excerpts. Algorithm: Tran, Lee &amp; Jung,
     <em>Machine Composition of Korean Music via TDA and ANN</em>, J. Math. Music 18(1):20–41, 2024
     (arXiv:2203.15468) — here generalized to the three distances. Rendered with real geomungo samples
     (<a href="https://www.gugak.go.kr/digitaleum/">National Gugak Center · Digitaleum</a>, KOGL Type-1).</p>
@@ -155,9 +146,10 @@
     </div>
     <p id="tryStatus" class="cap"></p>
     <div id="tryResult"></div>
-    <p class="cap" style="margin-top:1rem">Algorithm A is instant; Algorithm B trains a small MLP in your browser
-    (TensorFlow.js) on your piece, so it takes a few seconds. First ~200 notes are used; ~1-min excerpts.
-    Presets use the paper's exact note encoding; uploaded MIDI/MusicXML use MIDI pitches, so cycle counts may differ.</p>
+    <p class="cap" style="margin-top:1rem">Your browser trains a small MLP (TensorFlow.js) on your piece, so it
+    takes a few seconds. First ~200 notes are used; ~1-min excerpts. Uploaded MIDI/MusicXML note durations are
+    snapped to a 1/12-beat grid, so micro-timing differences don't fragment the graph into spurious nodes;
+    presets use the paper's exact note encoding, while uploads use MIDI pitches, so cycle counts may differ.</p>
   </div></section>
 
   <section id="cite" class="cite"><div class="wrap">

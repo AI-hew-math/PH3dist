@@ -1,5 +1,5 @@
 /* Client-side port of the PH-music pipeline (graph -> d1/d2/d3 distances -> H1
-   persistence with representative cycles -> Overlap matrix -> Algorithm A).
+   persistence with representative cycles -> Overlap matrix).
    Verified against the Python implementation (ph_music/*) on the showcase piece.
    Algorithm B (ANN) lives in compose-app.js using TensorFlow.js. */
 (function (root) {
@@ -155,7 +155,7 @@
     return { G, matrices: M, d1: h1(M.d1), d2: h1(M.d2), d3: h1(M.d3) };
   }
 
-  // ---- Overlap matrix + Algorithm A (tda_compose.py) ----
+  // ---- Overlap matrix (tda_compose.py) ----
   function timelineIndices(noteSeq, G) {
     return noteSeq.map(nd => G.index.get(G.key(nd)));
   }
@@ -176,38 +176,11 @@
     const surv = cycSets.map(c => survival(timeline, c, s));   // k x d bool
     return { cycSets, surv };
   }
-  function algorithmA(res, dk, noteSeq, s, seed) {
-    const G = res.G, tl = timelineIndices(noteSeq, G), d = tl.length;
-    const { cycSets, surv } = overlap(res, dk, tl, s);
-    const S = [], I = [];
-    for (let j = 0; j < d; j++) {
-      const sj = []; for (let i = 0; i < cycSets.length; i++) if (surv[i][j]) sj.push(i);
-      S.push(sj);
-      if (sj.length) {
-        let inter = new Set(cycSets[sj[0]]);
-        for (let m = 1; m < sj.length; m++) inter = new Set([...inter].filter(x => cycSets[sj[m]].has(x)));
-        if (!inter.size) for (const i of sj) for (const x of cycSets[i]) inter.add(x);
-        I.push(inter);
-      } else I.push(new Set());
-    }
-    const pool = tl.slice(), r = rng(seed || 0), out = [];
-    for (let j = 0; j < d; j++) {
-      if (S[j].length) out.push(pick(r, [...I[j]].sort((a, b) => a - b)));
-      else {
-        const forbidden = new Set();
-        if (j > 0 && S[j - 1].length) for (const x of I[j - 1]) forbidden.add(x);
-        if (j < d - 1 && S[j + 1].length) for (const x of I[j + 1]) forbidden.add(x);
-        let choices = pool.filter(p => !forbidden.has(p)); if (!choices.length) choices = pool;
-        out.push(pick(r, choices));
-      }
-    }
-    return out;  // node-index sequence
-  }
   const indicesToNotes = (res, idx) => idx.map(i => res.G.labels[i]);
 
   root.TDA = {
     rng, buildGraph, d1pair, d2pair, d3pair, distMatrix, h1, analyze,
-    timelineIndices, survival, overlap, algorithmA, indicesToNotes,
+    timelineIndices, survival, overlap, indicesToNotes,
   };
 })(typeof module !== "undefined" && module.exports ? module.exports : (this.window = this.window || this));
 if (typeof module !== "undefined" && module.exports) module.exports = module.exports.TDA;
