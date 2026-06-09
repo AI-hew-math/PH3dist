@@ -18,10 +18,10 @@ WEB = os.path.join(ROOT, "web", "audio")
 
 NEW = {  # instruments to download + segment (pyin range + sane MIDI window to reject octave errors)
     # sustained=True for blown/bowed tones (no natural decay) -> the player gates them to note length.
-    "gayageum": dict(label="가야금 Gayageum", seqs=[2538], fmin="C2", fmax="C6", lo=36, hi=78, sustained=False),
-    "daegeum":  dict(label="대금 Daegeum",    seqs=[2557], fmin="A3", fmax="C7", lo=60, hi=96, sustained=True),
-    "piri":     dict(label="피리 Piri",       seqs=[2505], fmin="G3", fmax="C7", lo=55, hi=92, sustained=True),
-    "haegeum":  dict(label="해금 Haegeum",    seqs=[2482], fmin="C3", fmax="C7", lo=50, hi=96, sustained=True),
+    "gayageum": dict(label="Gayageum (가야금)", seqs=[2538], fmin="C2", fmax="C6", lo=36, hi=78, sustained=False),
+    "daegeum":  dict(label="Daegeum (대금)",    seqs=[2557], fmin="A3", fmax="C7", lo=60, hi=96, sustained=True),
+    "piri":     dict(label="Piri (피리)",       seqs=[2505], fmin="G3", fmax="C7", lo=55, hi=92, sustained=True),
+    "haegeum":  dict(label="Haegeum (해금)",    seqs=[2482], fmin="C3", fmax="C7", lo=50, hi=96, sustained=True),
 }
 # Pitch classes each instrument actually uses, surveyed from the FULL basic-scale recordings
 # (continuous pyin over the whole take; 황종黃=E♭ tuning). Used to send "pitches the instrument
@@ -57,7 +57,7 @@ for old in glob.glob(os.path.join(geo_web, "geo_*.wav")): os.remove(old)  # drop
 geo_midis = sorted(int(os.path.basename(f)[4:-4]) for f in glob.glob(os.path.join(geo_src, "geo_*.wav")))
 for m in geo_midis:
     shutil.copyfile(os.path.join(geo_src, f"geo_{m}.wav"), os.path.join(geo_web, f"geomungo_{m}.wav"))
-manifest["geomungo"] = dict(label="거문고 Geomungo", midis=geo_midis, sustained=False, pitchClasses=PC["geomungo"])
+manifest["geomungo"] = dict(label="Geomungo (거문고)", midis=geo_midis, sustained=False, pitchClasses=PC["geomungo"])
 print(f"geomungo: {len(geo_midis)} samples (mirrored)  midis={geo_midis}")
 
 # --- the 4 new instruments: download + segment ---
