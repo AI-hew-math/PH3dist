@@ -23,6 +23,16 @@ NEW = {  # instruments to download + segment (pyin range + sane MIDI window to r
     "piri":     dict(label="피리 Piri",       seqs=[2505], fmin="G3", fmax="C7", lo=55, hi=92, sustained=True),
     "haegeum":  dict(label="해금 Haegeum",    seqs=[2482], fmin="C3", fmax="C7", lo=50, hi=96, sustained=True),
 }
+# Pitch classes each instrument actually uses, surveyed from the FULL basic-scale recordings
+# (continuous pyin over the whole take; 황종黃=E♭ tuning). Used to send "pitches the instrument
+# doesn't have" (e.g. gayageum is a 5-note 평조 pentatonic) to the piano fallback, not just range.
+PC = {
+    "geomungo": [0, 1, 2, 3, 4, 5, 7, 8, 10],          # C C# D Eb E F G Ab Bb  (skips F#, A, B)
+    "gayageum": [0, 3, 5, 8, 10],                       # C Eb F Ab Bb  — 평조 pentatonic (황 태 중 임 남)
+    "daegeum":  [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11],    # near-chromatic (skips only Eb=황)
+    "piri":     [0, 1, 2, 4, 6, 7, 9, 11],              # C C# D E F# G A B
+    "haegeum":  [0, 1, 3, 5, 7, 8, 9, 10],              # C C# Eb F G Ab A Bb  (fretless; demo scale)
+}
 
 cj = http.cookiejar.CookieJar()
 op = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
@@ -47,7 +57,7 @@ for old in glob.glob(os.path.join(geo_web, "geo_*.wav")): os.remove(old)  # drop
 geo_midis = sorted(int(os.path.basename(f)[4:-4]) for f in glob.glob(os.path.join(geo_src, "geo_*.wav")))
 for m in geo_midis:
     shutil.copyfile(os.path.join(geo_src, f"geo_{m}.wav"), os.path.join(geo_web, f"geomungo_{m}.wav"))
-manifest["geomungo"] = dict(label="거문고 Geomungo", midis=geo_midis, sustained=False)
+manifest["geomungo"] = dict(label="거문고 Geomungo", midis=geo_midis, sustained=False, pitchClasses=PC["geomungo"])
 print(f"geomungo: {len(geo_midis)} samples (mirrored)  midis={geo_midis}")
 
 # --- the 4 new instruments: download + segment ---
@@ -80,7 +90,7 @@ for name, cfg in NEW.items():
     for old in glob.glob(os.path.join(webdir, "*.wav")): os.remove(old)
     for m in midis:
         shutil.copyfile(os.path.join(outdir, f"{name}_{m}.wav"), os.path.join(webdir, f"{name}_{m}.wav"))
-    manifest[name] = dict(label=cfg["label"], midis=midis, sustained=cfg["sustained"])
+    manifest[name] = dict(label=cfg["label"], midis=midis, sustained=cfg["sustained"], pitchClasses=PC[name])
     print(f"{name}: {len(midis)} samples  midis={midis}")
 
 json.dump(manifest, open(os.path.join(WEB, "instruments.json"), "w"), ensure_ascii=False)

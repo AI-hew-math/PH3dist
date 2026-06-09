@@ -6,7 +6,7 @@
   const ORDER = ["d1", "d3", "d2"];
   const DCOL = { d1: "#3E8E7E", d3: "#E0A526", d2: "#C8443B" };
   const PIANO = { label: "피아노 Piano", synth: true, midis: [] };   // synthesized, full range, no samples
-  const DEFAULT_INSTR = { geomungo: { label: "거문고 Geomungo", sustained: false, midis: [39, 41, 44, 46, 48, 49, 51, 53, 55, 56, 58, 60, 62, 63, 65, 67] }, piano: PIANO };
+  const DEFAULT_INSTR = { geomungo: { label: "거문고 Geomungo", sustained: false, pitchClasses: [0, 1, 2, 3, 4, 5, 7, 8, 10], midis: [39, 41, 44, 46, 48, 49, 51, 53, 55, 56, 58, 60, 62, 63, 65, 67] }, piano: PIANO };
   const RANGE_TOL = 5;        // a note > this many semitones from any sample => "not on this instrument" -> piano
   const CAP = 200;            // cap input length (keeps PH + ANN fast)
   const EXCERPT = 56;         // playback excerpt length (notes)
@@ -42,8 +42,10 @@
   const isSynth = () => curInst === "piano" || !!(instruments[curInst] && instruments[curInst].synth);
   function noteOnInstrument(m) {                             // is pitch m actually playable on the current instrument?
     if (isSynth()) return true;
-    const ms = instMidis(); if (!ms.length) return false;
-    const nb = ms.reduce((a, b) => Math.abs(b - m) < Math.abs(a - m) ? b : a, ms[0]);
+    const I = instruments[curInst]; if (!I) return false;
+    if (I.pitchClasses && I.pitchClasses.indexOf(((m % 12) + 12) % 12) < 0) return false;  // a pitch class the instrument doesn't use
+    const ms = I.midis || []; if (!ms.length) return false;
+    const nb = ms.reduce((a, b) => Math.abs(b - m) < Math.abs(a - m) ? b : a, ms[0]);      // within playable range?
     return Math.abs(m - nb) <= RANGE_TOL;
   }
   const songOutOfInstrument = () => !isSynth() && !!song && song.map(noteMidiQL).some((x) => !noteOnInstrument(x[0]));
