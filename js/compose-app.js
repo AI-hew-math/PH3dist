@@ -226,7 +226,7 @@
     box.appendChild(rows);
     const bar = document.createElement("div"); bar.style.cssText = "display:flex;gap:10px;flex-wrap:wrap;margin-top:6px";
     const train = document.createElement("button");
-    train.className = "btn"; train.textContent = "Compose with the ANN (train in-browser)";
+    train.className = "btn"; train.textContent = "Start training now!";
     train.onclick = () => trainB(train); bar.appendChild(train);
     const reset = document.createElement("button");
     reset.className = "btn ghost"; reset.textContent = "↺ Reset";
