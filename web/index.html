@@ -107,12 +107,12 @@
     <h2>Distance-varied AI composition</h2>
     <p>Beyond replaying the cycles, we <strong>compose new geomungo pieces from the cycle structure</strong> of
     <em>Sanghyeondodeuri</em> (geomungo) — the same 189-note seed piece analysed above (7&#8202;/&#8202;4&#8202;/&#8202;3 cycles) —
-    following the ANN composition algorithm (Algorithm B) of
+    following the neural composition algorithm (Algorithm B) of
     <a href="https://arxiv.org/abs/2203.15468">Tran, Lee &amp; Jung (2024)</a>, run <em>separately for each distance</em>.
     A different distance gives different surviving cycles and a different "overlap" timeline, so the same machinery
     composes a <strong>different piece per distance</strong>: distance is a knob on the composition itself.</p>
 
-    <h3>Neural composition (ANN / MLP)</h3>
+    <h3>Neural composition (MLP)</h3>
     <p class="cap">An MLP learns to map the Overlap matrix to the note sequence from the single piece
     (periodic-extension training), then composes from a generated seed Overlap matrix.
     Steps anchored by a surviving cycle keep the learned note; the gaps improvise — so
@@ -143,6 +143,7 @@
       <label style="margin-left:auto">Instrument: <select id="instrSel"></select></label>
     </div>
     <p id="instrWarn" class="cap"></p>
+    <div id="tryActions" style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 4px"></div>
     <p id="tryStatus" class="cap"></p>
     <div id="tryResult"></div>
     <p class="cap" style="margin-top:1rem">Training takes a few seconds. The first ~200 notes are used, and clips
