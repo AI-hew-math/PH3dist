@@ -111,9 +111,10 @@
 
   <section><div class="wrap">
     <h2>Distance-varied AI composition</h2>
-    <p>Beyond replaying the cycles, we <strong>compose new geomungo pieces from the cycle structure</strong>,
+    <p>Beyond replaying the cycles, we <strong>compose new geomungo pieces from the cycle structure</strong> of
+    <em>Sanghyeondodeuri</em> (geomungo) — the same 189-note seed piece analysed above (7&#8202;/&#8202;4&#8202;/&#8202;3 cycles) —
     following the two TDA composition algorithms of
-    <a href="https://arxiv.org/abs/2203.15468">Tran, Lee &amp; Jung (2024)</a> — run <em>separately for each distance</em>.
+    <a href="https://arxiv.org/abs/2203.15468">Tran, Lee &amp; Jung (2024)</a>, run <em>separately for each distance</em>.
     A different distance gives different surviving cycles and a different "overlap" timeline, so the same machinery
     composes a <strong>different piece per distance</strong>: distance is a knob on the composition itself.</p>
 
@@ -128,7 +129,9 @@
 
     <h3>Algorithm B — neural (ANN / MLP)</h3>
     <p class="cap">An MLP learns to map the Overlap matrix to the note sequence from the single piece
-    (periodic-extension training), then composes from a generated seed Overlap matrix.</p>
+    (periodic-extension training), then composes from a generated seed Overlap matrix.
+    Steps anchored by a surviving cycle keep the learned note; the gaps improvise — so
+    $d_2$, with the fewest surviving cycles, departs from the original most.</p>
     <div class="audio">
       <div class="ap"><div class="lab d1">$d_1$ — 7 cycles</div><audio controls preload="none" src="audio/compB_d1.mp3" data-roll="compB_d1"></audio></div>
       <div class="ap"><div class="lab d3">$d_3$ — 4 cycles</div><audio controls preload="none" src="audio/compB_d3.mp3" data-roll="compB_d3"></audio></div>
