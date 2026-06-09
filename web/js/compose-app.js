@@ -1,11 +1,11 @@
 /* "Compose from your own piece" — fully client-side.
    Parse MIDI/MusicXML (durations snapped to a musical grid) -> TDA pipeline (web/js/tda.js)
-   -> Algorithm B (ANN, TensorFlow.js, trained in-browser) -> play on real geomungo (Web Audio). */
+   -> Algorithm B (ANN, TensorFlow.js, trained in-browser) -> play on a selectable gugak instrument (Web Audio). */
 (function () {
   "use strict";
   const ORDER = ["d1", "d3", "d2"];
   const DCOL = { d1: "#3E8E7E", d3: "#E0A526", d2: "#C8443B" };
-  const SAMPLE_MIDIS = [39, 41, 44, 46, 48, 49, 51, 53, 55, 56, 58, 60, 62, 63, 65, 67];
+  const DEFAULT_INSTR = { geomungo: { label: "거문고 Geomungo", midis: [39, 41, 44, 46, 48, 49, 51, 53, 55, 56, 58, 60, 62, 63, 65, 67] } };
   const CAP = 200;            // cap input length (keeps PH + ANN fast)
   const EXCERPT = 56;         // playback excerpt length (notes)
   const $ = (id) => document.getElementById(id);
@@ -35,23 +35,26 @@
 
   let ctx = null, buffers = {}, presets = {}, song = null, res = null;
   let comps = { B: {} }, sources = [];
+  let instruments = DEFAULT_INSTR, curInst = "geomungo";     // sample sets per gugak instrument (audio/instruments.json)
+  const instMidis = () => (instruments[curInst] && instruments[curInst].midis) || [];
 
   // ---------- audio ----------
   async function ensureAudio() {
     if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
     if (ctx.state === "suspended") await ctx.resume();
-    const missing = SAMPLE_MIDIS.filter((m) => !buffers[m]);
+    if (!buffers[curInst]) buffers[curInst] = {};
+    const bset = buffers[curInst], missing = instMidis().filter((m) => !bset[m]);
     if (missing.length) {
-      status("loading geomungo samples…");
+      status("loading " + ((instruments[curInst] && instruments[curInst].label) || curInst) + " samples…");
       for (const m of missing) {
-        const r = await fetch("audio/geomungo/geo_" + m + ".wav");
-        buffers[m] = await ctx.decodeAudioData(await r.arrayBuffer());
+        const r = await fetch("audio/" + curInst + "/" + curInst + "_" + m + ".wav");
+        bset[m] = await ctx.decodeAudioData(await r.arrayBuffer());
       }
       status("");
     }
   }
   // play/pause player over Web Audio (scheduled buffer sources, pausable by offset)
-  const nearest = (m) => SAMPLE_MIDIS.reduce((a, b) => Math.abs(b - m) < Math.abs(a - m) ? b : a);
+  const nearest = (m) => instMidis().reduce((a, b) => Math.abs(b - m) < Math.abs(a - m) ? b : a, instMidis()[0]);
   const player = { key: null, btn: null, sched: null, total: 0, offset: 0, startAt: 0, playing: false, timer: null };
   function killSources() { sources.forEach((s) => { try { s.stop(); } catch (e) {} }); sources = []; if (player.timer) { clearTimeout(player.timer); player.timer = null; } }
   function setBtn(btn, playing) {
@@ -70,8 +73,9 @@
     player.startAt = ctx.currentTime - player.offset + 0.05; sources = [];
     for (const n of player.sched) {
       if (n.s < player.offset - 1e-3) continue;
-      const when = player.startAt + n.s, nb = nearest(n.midi);
-      const src = ctx.createBufferSource(); src.buffer = buffers[nb]; src.playbackRate.value = Math.pow(2, (n.midi - nb) / 12);
+      const when = player.startAt + n.s, nb = nearest(n.midi), bset = buffers[curInst];
+      if (!bset || !bset[nb]) continue;
+      const src = ctx.createBufferSource(); src.buffer = bset[nb]; src.playbackRate.value = Math.pow(2, (n.midi - nb) / 12);
       const g = ctx.createGain(); src.connect(g); g.connect(ctx.destination);
       g.gain.setValueAtTime(0.9, when); g.gain.setValueAtTime(0.9, when + n.dur + 0.32); g.gain.linearRampToValueAtTime(0, when + n.dur + 0.5);
       src.start(when); src.stop(when + n.dur + 0.55); sources.push(src);
@@ -283,6 +287,15 @@
     fetch("data/preset_songs.json").then((r) => r.json()).then((p) => {
       presets = p; const sel = $("presetSel");
       Object.keys(p).forEach((n) => { const o = document.createElement("option"); o.value = n; o.textContent = n; sel.appendChild(o); });
+    }).catch(() => {});
+    fetch("audio/instruments.json").then((r) => r.json()).then((m) => {
+      instruments = m; const isel = $("instrSel");
+      if (isel) {
+        isel.innerHTML = "";
+        Object.keys(m).forEach((k) => { const o = document.createElement("option"); o.value = k; o.textContent = m[k].label || k; isel.appendChild(o); });
+        isel.value = curInst;
+        isel.onchange = () => { stopPlayback(); curInst = isel.value; };
+      }
     }).catch(() => {});
     $("loadPreset").onclick = () => { const n = $("presetSel").value; if (presets[n]) loadSong(presets[n].slice(), n); };
     $("fileInput").addEventListener("change", async (e) => {

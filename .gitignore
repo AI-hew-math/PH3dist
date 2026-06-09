@@ -4,3 +4,9 @@ out/
 .venv/
 .pytest_cache/
 docs/
+# downloaded gugak instrument source samples (regenerate via scripts/build_gugak_samples.py;
+# web/audio/<inst>/ are the served canonical copies)
+assets/gayageum_samples/
+assets/daegeum_samples/
+assets/piri_samples/
+assets/haegeum_samples/

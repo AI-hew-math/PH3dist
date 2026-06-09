@@ -132,18 +132,21 @@
     <h2>Try it: compose from your own piece</h2>
     <p>Pick a preset or drop a <strong>MIDI</strong> / <strong>MusicXML</strong> file, and your browser runs the
     <em>whole pipeline</em> — graph → three distances → $H_1$ cycles → Overlap matrix → composition — then plays the
-    result on real geomungo. Everything runs <strong>in your browser</strong>; nothing is uploaded.</p>
+    result on a real gugak instrument of your choice (거문고 · 가야금 · 대금 · 피리 · 해금).
+    Everything runs <strong>in your browser</strong>; nothing is uploaded.</p>
     <div class="controls">
       <label>Preset: <select id="presetSel"></select></label>
       <button id="loadPreset" class="btn small">Load</button>
       <span style="opacity:.6">or</span>
       <label class="btn small" for="fileInput">Upload MIDI / MusicXML</label>
       <input id="fileInput" type="file" accept=".mid,.midi,.xml,.musicxml" hidden>
+      <label style="margin-left:auto">Instrument: <select id="instrSel"></select></label>
     </div>
     <p id="tryStatus" class="cap"></p>
     <div id="tryResult"></div>
     <p class="cap" style="margin-top:1rem">Training takes a few seconds. The first ~200 notes are used, and clips
-    are ~1-minute excerpts. Uploaded files may give different cycle counts than the presets.</p>
+    are ~1-minute excerpts. Uploaded files may give different cycle counts than the presets. Instrument samples:
+    <a href="https://www.gugak.go.kr/digitaleum/">National Gugak Center · Digitaleum</a> (KOGL Type-1).</p>
   </div></section>
 
   <section id="cite" class="cite"><div class="wrap">
