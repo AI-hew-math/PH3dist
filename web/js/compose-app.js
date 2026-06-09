@@ -5,7 +5,9 @@
   "use strict";
   const ORDER = ["d1", "d3", "d2"];
   const DCOL = { d1: "#3E8E7E", d3: "#E0A526", d2: "#C8443B" };
-  const PIANO = { label: "피아노 Piano", synth: true, midis: [] };   // synthesized, full range, no samples
+  const PIANO = { label: "피아노 Piano", full: true, sustained: false, ext: "mp3",   // real samples (Salamander Grand Piano, CC-BY); plays any pitch
+    midis: [36, 39, 42, 45, 48, 51, 54, 57, 60, 63, 66, 69, 72, 75, 78, 81, 84, 87, 90, 93, 96],
+    pitchClasses: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] };
   const DEFAULT_INSTR = { geomungo: { label: "거문고 Geomungo", sustained: false, pitchClasses: [0, 1, 2, 3, 4, 5, 7, 8, 10], midis: [39, 41, 44, 46, 48, 49, 51, 53, 55, 56, 58, 60, 62, 63, 65, 67] }, piano: PIANO };
   const RANGE_TOL = 5;        // a note > this many semitones from any sample => "not on this instrument" -> piano
   const CAP = 200;            // cap input length (keeps PH + ANN fast)
@@ -39,16 +41,17 @@
   let comps = { B: {} }, sources = [];
   let instruments = DEFAULT_INSTR, curInst = "geomungo";     // sample sets per gugak instrument (audio/instruments.json)
   const instMidis = () => (instruments[curInst] && instruments[curInst].midis) || [];
-  const isSynth = () => curInst === "piano" || !!(instruments[curInst] && instruments[curInst].synth);
+  const isFull = () => !!(instruments[curInst] && instruments[curInst].full);     // piano: plays any pitch
+  const effInst = () => (isFull() || songOutOfInstrument()) ? "piano" : curInst;  // instrument actually sounded (piano fallback)
   function noteOnInstrument(m) {                             // is pitch m actually playable on the current instrument?
-    if (isSynth()) return true;
+    if (isFull()) return true;
     const I = instruments[curInst]; if (!I) return false;
     if (I.pitchClasses && I.pitchClasses.indexOf(((m % 12) + 12) % 12) < 0) return false;  // a pitch class the instrument doesn't use
     const ms = I.midis || []; if (!ms.length) return false;
     const nb = ms.reduce((a, b) => Math.abs(b - m) < Math.abs(a - m) ? b : a, ms[0]);      // within playable range?
     return Math.abs(m - nb) <= RANGE_TOL;
   }
-  const songOutOfInstrument = () => !isSynth() && !!song && song.map(noteMidiQL).some((x) => !noteOnInstrument(x[0]));
+  const songOutOfInstrument = () => !isFull() && !!song && song.map(noteMidiQL).some((x) => !noteOnInstrument(x[0]));
   function updateInstrWarning() {
     const el = $("instrWarn"); if (!el) return;
     if (songOutOfInstrument()) {
@@ -62,13 +65,13 @@
   async function ensureAudio() {
     if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
     if (ctx.state === "suspended") await ctx.resume();
-    if (isSynth() || songOutOfInstrument()) return;          // piano (synth) needs no samples; out-of-range -> piano fallback
-    if (!buffers[curInst]) buffers[curInst] = {};
-    const bset = buffers[curInst], missing = instMidis().filter((m) => !bset[m]);
+    const eff = effInst(), I = instruments[eff]; if (!I || !(I.midis || []).length) return;
+    if (!buffers[eff]) buffers[eff] = {};
+    const bset = buffers[eff], ext = I.ext || "wav", missing = I.midis.filter((m) => !bset[m]);
     if (missing.length) {
-      status("loading " + ((instruments[curInst] && instruments[curInst].label) || curInst) + " samples…");
+      status("loading " + (I.label || eff) + " samples…");
       for (const m of missing) {
-        const r = await fetch("audio/" + curInst + "/" + curInst + "_" + m + ".wav");
+        const r = await fetch("audio/" + eff + "/" + eff + "_" + m + "." + ext);
         bset[m] = await ctx.decodeAudioData(await r.arrayBuffer());
       }
       status("");
@@ -104,14 +107,12 @@
   function resume() {
     player.playing = true; setBtn(player.btn, true);
     player.startAt = ctx.currentTime - player.offset + 0.05; sources = [];
-    const sustained = !!(instruments[curInst] && instruments[curInst].sustained);
-    const usePiano = isSynth() || songOutOfInstrument();    // piano option, or piece has notes outside this instrument
+    const eff = effInst(), I = instruments[eff] || {}, ems = I.midis || [], sustained = !!I.sustained, bset = buffers[eff] || {};
+    const enear = (m) => ems.length ? ems.reduce((a, b) => Math.abs(b - m) < Math.abs(a - m) ? b : a, ems[0]) : -1;
     for (const n of player.sched) {
       if (n.s < player.offset - 1e-3) continue;
-      const when = player.startAt + n.s;
-      if (usePiano) { pianoVoice(when, n.midi, n.dur); continue; }
-      const nb = nearest(n.midi), bset = buffers[curInst];
-      if (!bset || !bset[nb]) { pianoVoice(when, n.midi, n.dur); continue; }
+      const when = player.startAt + n.s, nb = enear(n.midi);
+      if (nb < 0 || !bset[nb]) { pianoVoice(when, n.midi, n.dur); continue; }   // emergency synth fallback if a sample is missing
       const src = ctx.createBufferSource(); src.buffer = bset[nb]; src.playbackRate.value = Math.pow(2, (n.midi - nb) / 12);
       const g = ctx.createGain(); src.connect(g); g.connect(ctx.destination);
       if (sustained) {                                    // blown/bowed tones don't decay -> gate to ~note length so they don't pile up into a chord
