@@ -113,20 +113,40 @@
     if (doc.querySelector("parsererror")) throw new Error("invalid XML");
     const part = doc.querySelector("part"); if (!part) throw new Error("no <part> in MusicXML");
     const STEP = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
-    const seq = []; let div = 1;
+    // Walk each measure with a time cursor — <backup>/<forward> rewind/advance it, so multiple
+    // voices/staves (e.g. a piano grand staff) are placed at their true onsets instead of being
+    // concatenated. Then keep the TOP pitch at each onset -> one melody line (same as the MIDI path).
+    const events = []; let div = 1, base = 0;
     part.querySelectorAll("measure").forEach((meas) => {
-      const d = meas.querySelector("attributes > divisions"); if (d) div = parseInt(d.textContent) || div;
-      meas.querySelectorAll("note").forEach((note) => {
-        if (note.querySelector("chord")) return;
-        const durEl = note.querySelector("duration"); const ql = durEl ? parseInt(durEl.textContent) / div : 0;
-        if (note.querySelector("rest")) return;
-        const p = note.querySelector("pitch"); if (!p) return;
-        const step = p.querySelector("step").textContent.trim();
-        const oct = parseInt(p.querySelector("octave").textContent);
-        const alt = p.querySelector("alter") ? parseInt(p.querySelector("alter").textContent) : 0;
-        seq.push([12 * (oct + 1) + STEP[step] + alt, quantQL(ql)]);
+      const dv = meas.querySelector("attributes > divisions"); if (dv) div = parseInt(dv.textContent) || div;
+      let cursor = 0, lastOnset = 0, measLen = 0;
+      Array.from(meas.childNodes).forEach((el) => {
+        if (el.nodeType !== 1) return;
+        const tag = el.tagName.toLowerCase();
+        if (tag === "note") {
+          const isChord = !!el.querySelector("chord");
+          const durEl = el.querySelector("duration"); const dur = durEl ? parseInt(durEl.textContent) || 0 : 0;
+          const onset = isChord ? lastOnset : cursor;
+          const p = el.querySelector("pitch");
+          if (p && !el.querySelector("rest")) {
+            const step = p.querySelector("step").textContent.trim();
+            const oct = parseInt(p.querySelector("octave").textContent);
+            const alt = p.querySelector("alter") ? parseInt(p.querySelector("alter").textContent) : 0;
+            events.push({ onset: base + onset, midi: 12 * (oct + 1) + STEP[step] + alt, ql: quantQL(dur / div) });
+          }
+          if (!isChord) { lastOnset = cursor; cursor += dur; }
+          if (cursor > measLen) measLen = cursor;
+        } else if (tag === "backup") {
+          const d = el.querySelector("duration"); cursor = Math.max(0, cursor - (d ? parseInt(d.textContent) || 0 : 0));
+        } else if (tag === "forward") {
+          const d = el.querySelector("duration"); cursor += (d ? parseInt(d.textContent) || 0 : 0);
+        }
       });
+      base += measLen;
     });
+    const byOnset = new Map();
+    for (const e of events) { const cur = byOnset.get(e.onset); if (!cur || e.midi > cur.midi) byOnset.set(e.onset, e); }
+    const seq = [...byOnset.keys()].sort((a, b) => a - b).map((o) => { const e = byOnset.get(o); return [e.midi, e.ql]; });
     if (!seq.length) throw new Error("no notes in MusicXML");
     return seq;
   }
@@ -209,6 +229,11 @@
     const h = document.createElement("h3");
     h.textContent = (name || "your piece") + " — surviving cycles " + ORDER.map((k) => res[k].length).join(" → ");
     box.appendChild(h);
+    const counts = ORDER.map((k) => res[k].length), maxC = Math.max(...counts);
+    let advice = "";
+    if (maxC === 0) advice = "No robust cycles were found, so each distance just replays your piece. Persistent homology needs repeated structure — try a longer or more repetitive piece (the method is built for repetitive court music).";
+    else if (counts[0] === counts[counts.length - 1]) advice = "Only " + maxC + " cycle" + (maxC > 1 ? "s" : "") + ", and the count doesn't drop across the distances, so the three versions will sound nearly identical. The effect is strongest on long, repetitive pieces.";
+    if (advice) { const w = document.createElement("p"); w.className = "cap"; w.style.cssText = "background:#fff7e6;border-left:3px solid var(--d3);padding:8px 12px;border-radius:6px;margin:6px 0"; w.textContent = "⚠ " + advice; box.appendChild(w); }
     const rows = document.createElement("div"); rows.className = "tryrows";
     const SUB = { d1: "₁", d3: "₃", d2: "₂" };
     for (const k of ORDER) {
