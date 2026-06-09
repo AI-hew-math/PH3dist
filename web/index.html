@@ -99,9 +99,9 @@
     and rendered with <strong>real geomungo</strong> samples. As $d_1\to d_3\to d_2$, fewer cycles means the core
     motif <strong>repeats more</strong> --- sparser and more insistent.</p>
     <div class="audio">
-      <div class="ap"><div class="lab d1">$d_1$ — 7 cycles (full)</div><audio controls preload="none" src="audio/d1.mp3"></audio></div>
-      <div class="ap"><div class="lab d3">$d_3$ — 4 cycles</div><audio controls preload="none" src="audio/d3.mp3"></audio></div>
-      <div class="ap"><div class="lab d2">$d_2$ — 3 cycles (core)</div><audio controls preload="none" src="audio/d2.mp3"></audio></div>
+      <div class="ap"><div class="lab d1">$d_1$ — 7 cycles (full)</div><audio controls preload="none" src="audio/d1.mp3" data-roll="d1"></audio></div>
+      <div class="ap"><div class="lab d3">$d_3$ — 4 cycles</div><audio controls preload="none" src="audio/d3.mp3" data-roll="d3"></audio></div>
+      <div class="ap"><div class="lab d2">$d_2$ — 3 cycles (core)</div><audio controls preload="none" src="audio/d2.mp3" data-roll="d2"></audio></div>
     </div>
     <p style="font-size:.9rem;opacity:.75">Direct cycle sonification — the surviving loops sounded as-is with real
     geomungo samples (<a href="https://www.gugak.go.kr/digitaleum/">National Gugak Center · Digitaleum</a>, KOGL Type-1).
@@ -120,18 +120,18 @@
     <p class="cap">At each step, sample a note from the cycles surviving there; where none survive, from a
     frequency-weighted node pool with neighbour constraints. No training.</p>
     <div class="audio">
-      <div class="ap"><div class="lab d1">$d_1$ — 7 cycles</div><audio controls preload="none" src="audio/compA_d1.mp3"></audio></div>
-      <div class="ap"><div class="lab d3">$d_3$ — 4 cycles</div><audio controls preload="none" src="audio/compA_d3.mp3"></audio></div>
-      <div class="ap"><div class="lab d2">$d_2$ — 3 cycles</div><audio controls preload="none" src="audio/compA_d2.mp3"></audio></div>
+      <div class="ap"><div class="lab d1">$d_1$ — 7 cycles</div><audio controls preload="none" src="audio/compA_d1.mp3" data-roll="compA_d1"></audio></div>
+      <div class="ap"><div class="lab d3">$d_3$ — 4 cycles</div><audio controls preload="none" src="audio/compA_d3.mp3" data-roll="compA_d3"></audio></div>
+      <div class="ap"><div class="lab d2">$d_2$ — 3 cycles</div><audio controls preload="none" src="audio/compA_d2.mp3" data-roll="compA_d2"></audio></div>
     </div>
 
     <h3>Algorithm B — neural (ANN / MLP)</h3>
     <p class="cap">An MLP learns to map the Overlap matrix to the note sequence from the single piece
     (periodic-extension training), then composes from a generated seed Overlap matrix.</p>
     <div class="audio">
-      <div class="ap"><div class="lab d1">$d_1$ — 7 cycles</div><audio controls preload="none" src="audio/compB_d1.mp3"></audio></div>
-      <div class="ap"><div class="lab d3">$d_3$ — 4 cycles</div><audio controls preload="none" src="audio/compB_d3.mp3"></audio></div>
-      <div class="ap"><div class="lab d2">$d_2$ — 3 cycles</div><audio controls preload="none" src="audio/compB_d2.mp3"></audio></div>
+      <div class="ap"><div class="lab d1">$d_1$ — 7 cycles</div><audio controls preload="none" src="audio/compB_d1.mp3" data-roll="compB_d1"></audio></div>
+      <div class="ap"><div class="lab d3">$d_3$ — 4 cycles</div><audio controls preload="none" src="audio/compB_d3.mp3" data-roll="compB_d3"></audio></div>
+      <div class="ap"><div class="lab d2">$d_2$ — 3 cycles</div><audio controls preload="none" src="audio/compB_d2.mp3" data-roll="compB_d2"></audio></div>
     </div>
     <p style="font-size:.9rem;opacity:.75">~1-min excerpts. Algorithms: Tran, Lee &amp; Jung,
     <em>Machine Composition of Korean Music via TDA and ANN</em>, J. Math. Music 18(1):20–41, 2024
@@ -177,6 +177,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.28/build/Midi.js"></script>
   <script src="js/tda.js"></script>
+  <script src="js/pianoroll.js"></script>
   <script src="js/compose-app.js"></script>
 </body>
 </html>
