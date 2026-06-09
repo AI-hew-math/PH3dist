@@ -5,7 +5,9 @@
   "use strict";
   const ORDER = ["d1", "d3", "d2"];
   const DCOL = { d1: "#3E8E7E", d3: "#E0A526", d2: "#C8443B" };
-  const DEFAULT_INSTR = { geomungo: { label: "거문고 Geomungo", sustained: false, midis: [39, 41, 44, 46, 48, 49, 51, 53, 55, 56, 58, 60, 62, 63, 65, 67] } };
+  const PIANO = { label: "피아노 Piano", synth: true, midis: [] };   // synthesized, full range, no samples
+  const DEFAULT_INSTR = { geomungo: { label: "거문고 Geomungo", sustained: false, midis: [39, 41, 44, 46, 48, 49, 51, 53, 55, 56, 58, 60, 62, 63, 65, 67] }, piano: PIANO };
+  const RANGE_TOL = 5;        // a note > this many semitones from any sample => "not on this instrument" -> piano
   const CAP = 200;            // cap input length (keeps PH + ANN fast)
   const EXCERPT = 56;         // playback excerpt length (notes)
   const $ = (id) => document.getElementById(id);
@@ -37,11 +39,28 @@
   let comps = { B: {} }, sources = [];
   let instruments = DEFAULT_INSTR, curInst = "geomungo";     // sample sets per gugak instrument (audio/instruments.json)
   const instMidis = () => (instruments[curInst] && instruments[curInst].midis) || [];
+  const isSynth = () => curInst === "piano" || !!(instruments[curInst] && instruments[curInst].synth);
+  function noteOnInstrument(m) {                             // is pitch m actually playable on the current instrument?
+    if (isSynth()) return true;
+    const ms = instMidis(); if (!ms.length) return false;
+    const nb = ms.reduce((a, b) => Math.abs(b - m) < Math.abs(a - m) ? b : a, ms[0]);
+    return Math.abs(m - nb) <= RANGE_TOL;
+  }
+  const songOutOfInstrument = () => !isSynth() && !!song && song.map(noteMidiQL).some((x) => !noteOnInstrument(x[0]));
+  function updateInstrWarning() {
+    const el = $("instrWarn"); if (!el) return;
+    if (songOutOfInstrument()) {
+      const lbl = (instruments[curInst] && instruments[curInst].label) || curInst;
+      el.textContent = "⚠ 선택한 악기(" + lbl + ")에 없는 음이 있어, 그 음으로 학습한 선율은 피아노로 연주됩니다.  —  Some pitches aren't on this instrument, so the trained melody is played on piano.";
+      el.style.cssText = "background:#fff7e6;border-left:3px solid var(--d3);padding:8px 12px;border-radius:6px;margin:8px 0";
+    } else { el.textContent = ""; el.style.cssText = ""; }
+  }
 
   // ---------- audio ----------
   async function ensureAudio() {
     if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
     if (ctx.state === "suspended") await ctx.resume();
+    if (isSynth() || songOutOfInstrument()) return;          // piano (synth) needs no samples; out-of-range -> piano fallback
     if (!buffers[curInst]) buffers[curInst] = {};
     const bset = buffers[curInst], missing = instMidis().filter((m) => !bset[m]);
     if (missing.length) {
@@ -55,6 +74,18 @@
   }
   // play/pause player over Web Audio (scheduled buffer sources, pausable by offset)
   const nearest = (m) => instMidis().reduce((a, b) => Math.abs(b - m) < Math.abs(a - m) ? b : a, instMidis()[0]);
+  function pianoVoice(when, midi, dur) {                     // synthesized piano (full range; used for the piano option + out-of-range fallback)
+    const freq = 440 * Math.pow(2, (midi - 69) / 12), decay = Math.max(dur, 0.16) + 0.35;
+    const g = ctx.createGain(); g.connect(ctx.destination);
+    g.gain.setValueAtTime(0.0001, when);
+    g.gain.exponentialRampToValueAtTime(0.38, when + 0.006); // sharp attack
+    g.gain.exponentialRampToValueAtTime(0.0001, when + decay); // piano-like decay
+    for (const spec of [[1, 1.0, "triangle"], [2, 0.25, "sine"], [3, 0.08, "sine"]]) {
+      const o = ctx.createOscillator(); o.type = spec[2]; o.frequency.value = freq * spec[0];
+      const og = ctx.createGain(); og.gain.value = spec[1]; o.connect(og); og.connect(g);
+      o.start(when); o.stop(when + decay + 0.02); sources.push(o);
+    }
+  }
   const player = { key: null, btn: null, sched: null, total: 0, offset: 0, startAt: 0, playing: false, timer: null };
   function killSources() { sources.forEach((s) => { try { s.stop(); } catch (e) {} }); sources = []; if (player.timer) { clearTimeout(player.timer); player.timer = null; } }
   function setBtn(btn, playing) {
@@ -72,10 +103,13 @@
     player.playing = true; setBtn(player.btn, true);
     player.startAt = ctx.currentTime - player.offset + 0.05; sources = [];
     const sustained = !!(instruments[curInst] && instruments[curInst].sustained);
+    const usePiano = isSynth() || songOutOfInstrument();    // piano option, or piece has notes outside this instrument
     for (const n of player.sched) {
       if (n.s < player.offset - 1e-3) continue;
-      const when = player.startAt + n.s, nb = nearest(n.midi), bset = buffers[curInst];
-      if (!bset || !bset[nb]) continue;
+      const when = player.startAt + n.s;
+      if (usePiano) { pianoVoice(when, n.midi, n.dur); continue; }
+      const nb = nearest(n.midi), bset = buffers[curInst];
+      if (!bset || !bset[nb]) { pianoVoice(when, n.midi, n.dur); continue; }
       const src = ctx.createBufferSource(); src.buffer = bset[nb]; src.playbackRate.value = Math.pow(2, (n.midi - nb) / 12);
       const g = ctx.createGain(); src.connect(g); g.connect(ctx.destination);
       if (sustained) {                                    // blown/bowed tones don't decay -> gate to ~note length so they don't pile up into a chord
@@ -270,9 +304,10 @@
     train.onclick = () => trainB(train); bar.appendChild(train);
     const reset = document.createElement("button");
     reset.className = "btn ghost"; reset.textContent = "↺ Reset";
-    reset.onclick = () => { stopPlayback(); song = null; res = null; comps = { B: {} }; box.innerHTML = ""; status("cleared — pick a preset or upload a file"); };
+    reset.onclick = () => { stopPlayback(); song = null; res = null; comps = { B: {} }; box.innerHTML = ""; status("cleared — pick a preset or upload a file"); updateInstrWarning(); };
     bar.appendChild(reset);
     box.appendChild(bar);
+    updateInstrWarning();
   }
 
   async function trainB(btn) {
@@ -299,15 +334,16 @@
       presets = p; const sel = $("presetSel");
       Object.keys(p).forEach((n) => { const o = document.createElement("option"); o.value = n; o.textContent = n; sel.appendChild(o); });
     }).catch(() => {});
-    fetch("audio/instruments.json").then((r) => r.json()).then((m) => {
-      instruments = m; const isel = $("instrSel");
-      if (isel) {
-        isel.innerHTML = "";
-        Object.keys(m).forEach((k) => { const o = document.createElement("option"); o.value = k; o.textContent = m[k].label || k; isel.appendChild(o); });
-        isel.value = curInst;
-        isel.onchange = () => { stopPlayback(); curInst = isel.value; };
-      }
-    }).catch(() => {});
+    const fillInstrSel = () => {
+      const isel = $("instrSel"); if (!isel) return;
+      isel.innerHTML = "";
+      Object.keys(instruments).forEach((k) => { const o = document.createElement("option"); o.value = k; o.textContent = instruments[k].label || k; isel.appendChild(o); });
+      if (!instruments[curInst]) curInst = Object.keys(instruments)[0];
+      isel.value = curInst;
+      isel.onchange = () => { stopPlayback(); curInst = isel.value; updateInstrWarning(); };
+    };
+    fetch("audio/instruments.json").then((r) => r.json()).then((m) => { instruments = Object.assign({}, m, { piano: PIANO }); })
+      .catch(() => {}).then(() => { fillInstrSel(); updateInstrWarning(); });
     $("loadPreset").onclick = () => { const n = $("presetSel").value; if (presets[n]) loadSong(presets[n].slice(), n); };
     $("fileInput").addEventListener("change", async (e) => {
       const f = e.target.files[0]; if (!f) return;
