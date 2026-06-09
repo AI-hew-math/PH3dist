@@ -139,6 +139,25 @@
     (<a href="https://www.gugak.go.kr/digitaleum/">National Gugak Center · Digitaleum</a>, KOGL Type-1).</p>
   </div></section>
 
+  <section id="tryit"><div class="wrap">
+    <h2>Try it: compose from your own piece</h2>
+    <p>Pick a preset or drop a <strong>MIDI</strong> / <strong>MusicXML</strong> file, and your browser runs the
+    <em>whole pipeline</em> — graph → three distances → $H_1$ cycles → Overlap matrix → composition — then plays the
+    result on real geomungo. Everything runs <strong>in your browser</strong>; nothing is uploaded.</p>
+    <div class="controls">
+      <label>Preset: <select id="presetSel"></select></label>
+      <button id="loadPreset" class="btn small">Load</button>
+      <span style="opacity:.6">or</span>
+      <label class="btn small" for="fileInput">Upload MIDI / MusicXML</label>
+      <input id="fileInput" type="file" accept=".mid,.midi,.xml,.musicxml" hidden>
+    </div>
+    <p id="tryStatus" class="cap"></p>
+    <div id="tryResult"></div>
+    <p class="cap" style="margin-top:1rem">Algorithm A is instant; Algorithm B trains a small MLP in your browser
+    (TensorFlow.js) on your piece, so it takes a few seconds. First ~200 notes are used; ~1-min excerpts.
+    Presets use the paper's exact note encoding; uploaded MIDI/MusicXML use MIDI pitches, so cycle counts may differ.</p>
+  </div></section>
+
   <section id="cite" class="cite"><div class="wrap">
     <h2>Citation</h2>
     <pre>@article{heo2025ph_music,
@@ -155,5 +174,9 @@
     <a href="https://github.com/AI-hew-math/PH3dist">Code</a>
   </div></footer>
   <script src="js/explorer.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.28/build/Midi.js"></script>
+  <script src="js/tda.js"></script>
+  <script src="js/compose-app.js"></script>
 </body>
 </html>
