@@ -43,21 +43,44 @@
       status("");
     }
   }
-  function stopAll() { sources.forEach((s) => { try { s.stop(); } catch (e) {} }); sources = []; }
-  function play(notes, tempo) {
-    stopAll(); tempo = tempo || 96; const qps = tempo / 60; let t = ctx.currentTime + 0.08;
-    for (const label of notes) {
-      const [midi, ql] = noteMidiQL(label);
-      const nb = SAMPLE_MIDIS.reduce((a, b) => Math.abs(b - midi) < Math.abs(a - midi) ? b : a);
-      const src = ctx.createBufferSource(); src.buffer = buffers[nb];
-      src.playbackRate.value = Math.pow(2, (midi - nb) / 12);
+  // play/pause player over Web Audio (scheduled buffer sources, pausable by offset)
+  const nearest = (m) => SAMPLE_MIDIS.reduce((a, b) => Math.abs(b - m) < Math.abs(a - m) ? b : a);
+  const player = { key: null, btn: null, sched: null, total: 0, offset: 0, startAt: 0, playing: false, timer: null };
+  function killSources() { sources.forEach((s) => { try { s.stop(); } catch (e) {} }); sources = []; if (player.timer) { clearTimeout(player.timer); player.timer = null; } }
+  function setBtn(btn, playing) {
+    if (!btn) return;
+    if (!btn.dataset.base) btn.dataset.base = btn.textContent;
+    btn.textContent = playing ? "⏸ Pause" : btn.dataset.base;
+    btn.classList.toggle("playing", playing);
+  }
+  function buildSchedule(notes, tempo) {
+    const qps = (tempo || 96) / 60; let t = 0; const sch = [];
+    for (const label of notes) { const [midi, ql] = noteMidiQL(label); const dur = Math.max(0.12, ql / qps); sch.push({ s: t, midi, dur }); t += dur; }
+    return { sch, total: t };
+  }
+  function resume() {
+    player.playing = true; setBtn(player.btn, true);
+    player.startAt = ctx.currentTime - player.offset + 0.05; sources = [];
+    for (const n of player.sched) {
+      if (n.s < player.offset - 1e-3) continue;
+      const when = player.startAt + n.s, nb = nearest(n.midi);
+      const src = ctx.createBufferSource(); src.buffer = buffers[nb]; src.playbackRate.value = Math.pow(2, (n.midi - nb) / 12);
       const g = ctx.createGain(); src.connect(g); g.connect(ctx.destination);
-      const dur = Math.max(0.12, ql / qps);
-      g.gain.setValueAtTime(0.9, t);
-      g.gain.setValueAtTime(0.9, t + dur + 0.32);
-      g.gain.linearRampToValueAtTime(0, t + dur + 0.5);
-      src.start(t); src.stop(t + dur + 0.55); sources.push(src); t += dur;
+      g.gain.setValueAtTime(0.9, when); g.gain.setValueAtTime(0.9, when + n.dur + 0.32); g.gain.linearRampToValueAtTime(0, when + n.dur + 0.5);
+      src.start(when); src.stop(when + n.dur + 0.55); sources.push(src);
     }
+    player.timer = setTimeout(finishPlayback, (player.total - player.offset) * 1000 + 700);
+  }
+  function pausePlayback() { if (!player.playing) return; player.offset += ctx.currentTime - player.startAt; if (player.offset < 0) player.offset = 0; player.playing = false; killSources(); setBtn(player.btn, false); }
+  function finishPlayback() { killSources(); if (player.btn) setBtn(player.btn, false); player.key = null; player.btn = null; player.offset = 0; player.playing = false; }
+  function stopPlayback() { killSources(); if (player.btn) setBtn(player.btn, false); player.key = null; player.btn = null; player.offset = 0; player.playing = false; player.sched = null; }
+  async function toggle(key, notes, btn) {
+    if (!notes) return;
+    await ensureAudio();
+    if (player.key === key) { if (player.playing) pausePlayback(); else { player.btn = btn; resume(); } return; }
+    stopPlayback();
+    player.key = key; player.btn = btn; const b = buildSchedule(notes, 96); player.sched = b.sch; player.total = b.total; player.offset = 0;
+    resume();
   }
 
   // ---------- parsing ----------
@@ -137,6 +160,7 @@
 
   // ---------- pipeline + UI ----------
   function loadSong(notes, name) {
+    stopPlayback();
     if (notes.length > CAP) notes = notes.slice(0, CAP);
     song = notes; comps = { A: {}, B: {} };
     status("analyzing " + notes.length + " notes…");
@@ -163,17 +187,22 @@
       const lab = document.createElement("span"); lab.className = "lab " + k;
       lab.textContent = "d" + SUB[k] + " — " + res[k].length + " cycles"; row.appendChild(lab);
       const a = document.createElement("button"); a.className = "btn small"; a.textContent = "▶ Algorithm A";
-      a.onclick = async () => { await ensureAudio(); play(comps.A[k]); }; row.appendChild(a);
+      a.onclick = () => toggle("A:" + k, comps.A[k], a); row.appendChild(a);
       const b = document.createElement("button"); b.className = "btn small ghost"; b.id = "bbtn_" + k;
       b.textContent = "▶ Algorithm B"; b.disabled = true;
-      b.onclick = async () => { if (comps.B[k]) { await ensureAudio(); play(comps.B[k]); } }; row.appendChild(b);
+      b.onclick = () => { if (comps.B[k]) toggle("B:" + k, comps.B[k], b); }; row.appendChild(b);
       rows.appendChild(row);
     }
     box.appendChild(rows);
+    const bar = document.createElement("div"); bar.style.cssText = "display:flex;gap:10px;flex-wrap:wrap;margin-top:6px";
     const train = document.createElement("button");
     train.className = "btn"; train.textContent = "Train Algorithm B (ANN, in-browser)";
-    train.onclick = () => trainB(train);
-    box.appendChild(train);
+    train.onclick = () => trainB(train); bar.appendChild(train);
+    const reset = document.createElement("button");
+    reset.className = "btn ghost"; reset.textContent = "↺ Reset";
+    reset.onclick = () => { stopPlayback(); song = null; res = null; comps = { A: {}, B: {} }; box.innerHTML = ""; status("cleared — pick a preset or upload a file"); };
+    bar.appendChild(reset);
+    box.appendChild(bar);
   }
 
   async function trainB(btn) {
