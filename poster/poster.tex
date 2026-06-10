@@ -13,10 +13,7 @@
 \begin{beamercolorbox}[wd=\paperwidth,sep=1.4ex,leftskip=2ex,rightskip=2ex]{headline}
 \begin{columns}[c,onlytextwidth]
   \begin{column}{0.12\paperwidth}\centering
-    {\setlength{\fboxsep}{7pt}\colorbox{white}{\parbox{0.86\linewidth}{\centering
-      \includegraphics[width=0.96\linewidth]{logo_postech.png}\\[1.5ex]
-      \includegraphics[width=0.96\linewidth]{logo_minds.png}\\[1.5ex]
-      \includegraphics[width=0.58\linewidth]{logo_kias.png}}}}
+    {\color{dcPaper}\Large POSTECH\\[0.3ex]MINDS\\[0.3ex]KIAS}
   \end{column}
   \begin{column}{0.74\paperwidth}\centering
     {\color{dcPaper}\Huge\bfseries Persistent Homology of Music Network}\\[0.4ex]
@@ -71,17 +68,16 @@
       \large Each \textbf{node} $=$ (pitch, duration); an \textbf{edge} joins consecutive notes;
       the \textbf{weight} is $1/(\text{co-occurrence count})$ --- frequent neighbors are closer.
       Rests are skipped.
-      \vskip0.6ex\centering
-      \includegraphics[width=0.86\linewidth]{fig_network.pdf}\\[0.2ex]
+      \vskip0.4ex\centering
+      \includegraphics[width=0.66\linewidth]{fig_network.pdf}\\[0.2ex]
       {\normalsize The music network of \emph{Sanghyeondodeuri} (geomungo).}
     \end{block}
     \begin{block}{Three path distances}
-      \large On the music graph $M=(V,E,W)$, a path $P$ has \textbf{hop count} $\ell(P)$ and
-      \textbf{weight} $\omega(P)=\sum_{e\in P}W(e)$; let $h=\min_P\ell(P)$ be the fewest hops $v\!\to\!w$.
-      \begin{itemize}\setlength{\itemsep}{0.7ex}
-        \item[\done] $\textcolor{dcD1}{d_1(v,w)}=\omega(P)$ along a \textbf{fewest-edge} path ($\ell(P)=h$).
-        \item[\dtwo] $\textcolor{dcD2}{d_2(v,w)}=\min_P\omega(P)$ --- least total weight; \emph{the only true metric}.
-        \item[\dthree] $\textcolor{dcD3}{d_3(v,w)}=\min\{\omega(P):\ell(P)=h\}$ --- least weight \emph{among} fewest-edge paths.
+      \large Path $P$: \textbf{hops} $\ell(P)$, \textbf{weight} $\omega(P)=\sum_{e\in P}W(e)$; $h=\min_P\ell(P)$.
+      \begin{itemize}\setlength{\itemsep}{0.35ex}
+        \item[\done] $\textcolor{dcD1}{d_1}=\omega(P),\ \ell(P)=h$ --- a \textbf{fewest-edge} path.
+        \item[\dtwo] $\textcolor{dcD2}{d_2}=\min_P\omega(P)$ --- least weight; \emph{the only metric}.
+        \item[\dthree] $\textcolor{dcD3}{d_3}=\min\{\omega(P):\ell(P)=h\}$ --- hybrid (least weight, fewest edges).
       \end{itemize}
       \vskip0.6ex\centering
       \begin{tikzpicture}[scale=2.0,every node/.style={circle,draw=dcInk,fill=dcPaper,
@@ -114,14 +110,12 @@
       \[ \mathrm{bcd}_1(\textcolor{dcD2}{d_2}) \hookrightarrow
          \mathrm{bcd}_1(\textcolor{dcD3}{d_3}) \hookrightarrow
          \mathrm{bcd}_1(\textcolor{dcD1}{d_1}). \]
-      \emph{This injection is not automatic}: that an ordering of distances embeds the whole
-      $H_1$ barcode is a \textbf{nontrivial theorem} for path-representable graph distances, proved in
-      \textbf{Heo, Choi \& Jung 2025} (arXiv:2501.03553).\par\vskip0.5ex
+      A \textbf{nontrivial theorem} for path-representable distances (\textbf{Heo--Choi--Jung 2025}, arXiv:2501.03553).\par\vskip0.3ex
       Each cycle keeps its \textbf{birth}; its \textbf{lifespan grows}
       $\textcolor{dcD2}{d_2}\!\le\!\textcolor{dcD3}{d_3}\!\le\!\textcolor{dcD1}{d_1}$,
       and the number of cycles can only increase.
-      \vskip1.0ex\centering
-      \begin{tikzpicture}[xscale=2.6,yscale=1.7]
+      \vskip0.5ex\centering
+      \begin{tikzpicture}[xscale=2.6,yscale=1.3]
         \foreach \y/\bx/\dx/\col in {2/0/3.0/dcD1, 1/0/2.0/dcD3, 0/0/1.2/dcD2}{
           \draw[\col,line width=6pt,line cap=round] (\bx,\y) -- (\dx,\y);
         }
@@ -129,8 +123,8 @@
         \node[right,font=\large] at (2.1,1) {\textcolor{dcD3}{$d_3$}};
         \node[right,font=\large] at (1.3,0) {\textcolor{dcD2}{$d_2$}: shortest};
         \draw[dcInk,dashed,line width=1pt] (0,-0.45) -- (0,2.55) node[above,font=\normalsize]{shared birth};
-      \end{tikzpicture}\\[1.0ex]
-      \includegraphics[width=0.98\linewidth]{fig_persistence_diagram.pdf}\\[0.2ex]
+      \end{tikzpicture}\\[0.4ex]
+      \includegraphics[width=0.62\linewidth]{fig_persistence_diagram.pdf}\\[0.2ex]
       {\normalsize On real music: \textcolor{dcD1}{$d_1$} points lie above
        \textcolor{dcD2}{$d_2$} --- longer lifespans, shared births.}
     \end{block}
@@ -171,6 +165,12 @@
 \end{columns}
 
 \vfill
+\begin{center}\setlength{\fboxsep}{0pt}%
+  \includegraphics[height=1.15cm]{logo_postech.png}\hspace{2cm}%
+  \includegraphics[height=1.15cm]{logo_minds.png}\hspace{2cm}%
+  \includegraphics[height=1.15cm]{logo_kias.png}%
+\end{center}
+\vskip0.3ex
 % ===================== FOOTER =====================
 \begin{beamercolorbox}[wd=\paperwidth,sep=1.0ex,leftskip=2ex,rightskip=2ex]{headline}
   {\color{dcPaper}\normalsize Key refs: \textbf{Heo--Choi--Jung (2025) arXiv:2501.03553} (barcode injection); Tran--Park--Jung (2023) \emph{J.\ Math.\ Music}; Sethares--Budney (2014). \quad
