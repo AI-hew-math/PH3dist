@@ -75,9 +75,9 @@
     \begin{block}{Three path distances}
       \large Path $P$: \textbf{hops} $\ell(P)$, \textbf{weight} $\omega(P)=\sum_{e\in P}W(e)$; $h=\min_P\ell(P)$.
       \begin{itemize}\setlength{\itemsep}{0.35ex}
-        \item[\done] $\textcolor{dcD1}{d_1}=\omega(P),\ \ell(P)=h$ --- a \textbf{fewest-edge} path.
-        \item[\dtwo] $\textcolor{dcD2}{d_2}=\min_P\omega(P)$ --- least weight; \emph{the only metric}.
-        \item[\dthree] $\textcolor{dcD3}{d_3}=\min\{\omega(P):\ell(P)=h\}$ --- hybrid (least weight, fewest edges).
+        \item[\done] $=\omega(P),\ \ell(P)=h$ --- a \textbf{fewest-edge} path.
+        \item[\dtwo] $=\min_P\omega(P)$ --- least weight; \emph{the only metric}.
+        \item[\dthree] $=\min\{\omega(P):\ell(P)=h\}$ --- hybrid (least weight, fewest edges).
       \end{itemize}
       \vskip0.5ex\centering
       \begin{tikzpicture}[scale=1.5,every node/.style={circle,draw=dcInk,fill=dcPaper,
@@ -94,7 +94,7 @@
       \end{tikzpicture}\\[0.3ex]
       {\normalsize $s\!\to\!t$:\; $\textcolor{dcD1}{d_1{=}4}>\textcolor{dcD3}{d_3{=}2}>\textcolor{dcD2}{d_2{=}1.5}$.
        Both $s\,u\,t$ and $s\,v\,t$ are fewest-edge; $\textcolor{dcD1}{d_1}$ follows the one picked by
-       \textbf{vertex order} ($u$ before $v$), $\textcolor{dcD3}{d_3}$ the lightest, $\textcolor{dcD2}{d_2}$ the lightest overall.}
+       \textbf{vertex order} ($u$ before $v$), $\textcolor{dcD3}{d_3}$ the lightest, $\textcolor{dcD2}{d_2}$ the lightest.}
     \end{block}
     \begin{block}{Only \dtwo\ is a metric}
       \large $\textcolor{dcD2}{d_2}$ satisfies the triangle inequality;
