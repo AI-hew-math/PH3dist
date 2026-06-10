@@ -69,7 +69,7 @@
       the \textbf{weight} is $1/(\text{co-occurrence count})$ --- frequent neighbors are closer.
       Rests are skipped.
       \vskip0.4ex\centering
-      \includegraphics[width=0.66\linewidth]{fig_network.pdf}\\[0.2ex]
+      \includegraphics[width=0.54\linewidth]{fig_network.pdf}\\[0.2ex]
       {\normalsize The music network of \emph{Sanghyeondodeuri} (geomungo).}
     \end{block}
     \begin{block}{Three path distances}
@@ -80,19 +80,21 @@
         \item[\dthree] $\textcolor{dcD3}{d_3}=\min\{\omega(P):\ell(P)=h\}$ --- hybrid (least weight, fewest edges).
       \end{itemize}
       \vskip0.5ex\centering
-      \begin{tikzpicture}[scale=1.6,every node/.style={circle,draw=dcInk,fill=dcPaper,
+      \begin{tikzpicture}[scale=1.5,every node/.style={circle,draw=dcInk,fill=dcPaper,
           line width=1pt,inner sep=2pt,font=\normalsize}]
-        \node (s) at (0,0) {$s$};   \node (u) at (2,1.15) {$u$};   \node (v) at (2,0) {$v$};
-        \node (w) at (1.2,-1.15) {$w$};   \node (x) at (2.8,-1.15) {$x$};   \node (t) at (4,0) {$t$};
-        \draw[dcD1,line width=3pt] (s)--(u) node[midway,above,sloped,draw=none,fill=none,font=\small]{2};
-        \draw[dcD1,line width=3pt] (u)--(t) node[midway,above,sloped,draw=none,fill=none,font=\small]{2};
-        \draw[dcD3,line width=3pt] (s)--(v) node[midway,above,draw=none,fill=none,font=\small]{1};
-        \draw[dcD3,line width=3pt] (v)--(t) node[midway,above,draw=none,fill=none,font=\small]{1};
-        \draw[dcD2,line width=3pt] (s)--(w) node[midway,below,sloped,draw=none,fill=none,font=\small]{$\tfrac12$};
-        \draw[dcD2,line width=3pt] (w)--(x) node[midway,below,draw=none,fill=none,font=\small]{$\tfrac12$};
-        \draw[dcD2,line width=3pt] (x)--(t) node[midway,below,sloped,draw=none,fill=none,font=\small]{$\tfrac12$};
+        \node (s) at (0,0) {$s$};   \node (u) at (2,2.0) {$u$};   \node (v) at (2,0) {$v$};
+        \node (w) at (1.1,-2.0) {$w$};   \node (x) at (2.9,-2.0) {$x$};   \node (t) at (4,0) {$t$};
+        \draw[dcD1,line width=3pt] (s)--(u) node[midway,above left=-2pt,draw=none,fill=none,font=\small]{2};
+        \draw[dcD1,line width=3pt] (u)--(t) node[midway,above right=-2pt,draw=none,fill=none,font=\small]{2};
+        \draw[dcD3,line width=3pt] (s)--(v) node[midway,above=1pt,draw=none,fill=none,font=\small]{1};
+        \draw[dcD3,line width=3pt] (v)--(t) node[midway,above=1pt,draw=none,fill=none,font=\small]{1};
+        \draw[dcD2,line width=3pt] (s)--(w) node[midway,below left=-2pt,draw=none,fill=none,font=\small]{$\tfrac12$};
+        \draw[dcD2,line width=3pt] (w)--(x) node[midway,below=1pt,draw=none,fill=none,font=\small]{$\tfrac12$};
+        \draw[dcD2,line width=3pt] (x)--(t) node[midway,below right=-2pt,draw=none,fill=none,font=\small]{$\tfrac12$};
       \end{tikzpicture}\\[0.3ex]
-      {\normalsize $s\!\to\!t$:\; $\textcolor{dcD1}{d_1{=}4}$ (fewest edges) $>$ $\textcolor{dcD3}{d_3{=}2}$ (fewest edges, least wt.) $>$ $\textcolor{dcD2}{d_2{=}1.5}$ (least wt.).}
+      {\normalsize $s\!\to\!t$:\; $\textcolor{dcD1}{d_1{=}4}>\textcolor{dcD3}{d_3{=}2}>\textcolor{dcD2}{d_2{=}1.5}$.
+       Both $s\,u\,t$ and $s\,v\,t$ are fewest-edge; $\textcolor{dcD1}{d_1}$ follows the one picked by
+       \textbf{vertex order} ($u$ before $v$), $\textcolor{dcD3}{d_3}$ the lightest, $\textcolor{dcD2}{d_2}$ the lightest overall.}
     \end{block}
     \begin{block}{Only \dtwo\ is a metric}
       \large $\textcolor{dcD2}{d_2}$ satisfies the triangle inequality;
@@ -163,11 +165,10 @@
       \includegraphics[width=5cm]{qr_project.png}\\[0.2ex]
       {\normalsize Interactive explorer \& audio demos on the project page.}
     \end{block}
-    \vskip2.2ex
+    \vskip1.8ex
     \begin{center}\setlength{\fboxsep}{0pt}%
-      \includegraphics[height=1.5cm]{logo_postech.png}\\[1.8ex]
-      \includegraphics[height=1.5cm]{logo_minds.png}\\[1.8ex]
-      \includegraphics[height=1.5cm]{logo_kias.png}%
+      \includegraphics[height=1.15cm]{logo_postech.png}\\[2.6ex]
+      \includegraphics[height=2.3cm]{logo_minds.png}\hspace{1.6cm}\includegraphics[height=2.3cm]{logo_kias.png}%
     \end{center}
   \end{column}
 \end{columns}
