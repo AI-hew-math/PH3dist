@@ -34,11 +34,11 @@
 
 % ===================== HERO =====================
 \begin{columns}[t,onlytextwidth]
-  \begin{column}{0.40\paperwidth}
+  \begin{column}{0.409\paperwidth}
     \begin{block}{The big idea}
       \Large Distance is a \textbf{tunable resolution knob} on musical structure ---
       sweeping \done${}\to{}$\dthree${}\to{}$\dtwo\ distills a piece down to its
-      \textbf{core cyclic skeleton}.\par\vskip0.9ex
+      \textbf{core cyclic skeleton}.\par\vskip3.0ex
       \large
       \begin{itemize}\setlength{\itemsep}{1.0ex}
         \item \textbf{Three path distances}: \done\ (min edges),
@@ -51,7 +51,7 @@
       \end{itemize}
     \end{block}
   \end{column}
-  \begin{column}{0.59\paperwidth}
+  \begin{column}{0.56\paperwidth}
     \begin{block}{Cycle skeleton extraction}
       {\centering\includegraphics[width=\linewidth]{signature.pdf}\par}\vskip0.4ex
       {\Large On \emph{Sanghyeondodeuri} (geomungo): as \done${}\to{}$\dthree${}\to{}$\dtwo,
@@ -65,20 +65,23 @@
   % ---- COLUMN 1 ----
   \begin{column}{0.32\paperwidth}
     \begin{block}{From music to a graph}
-      \large Each \textbf{node} $=$ (pitch, duration); an \textbf{edge} joins consecutive notes;
-      the \textbf{weight} is $1/(\text{co-occurrence count})$ --- frequent neighbors are closer.
-      Rests are skipped.
+    \begin{itemize}
+        \item Each \textbf{node} $=$ (pitch, duration); 
+        \item an \textbf{edge} joins consecutive notes;
+        \item the \textbf{weight} is $1/(\text{co-occurrence count})$ 
+            \\ --- frequent neighbors are closer.
+    \end{itemize}
       \vskip0.4ex\centering
       \includegraphics[width=0.54\linewidth]{fig_network.pdf}\\[0.2ex]
       {\normalsize The music network of \emph{Sanghyeondodeuri} (geomungo).}
     \end{block}
     \begin{block}{Three path distances}
-      \large Path $P$: \textbf{hops} $\ell(P)$, min-hops $h=\min_P\ell(P)$;\\[0.2ex]
+      \large \textbf{hops} $\ell(P)$ of Path $P$, $h^*=\min_P\ell(P)$;\\[0.2ex]
       \textbf{weight} $\omega(P)=\mathop{\scalebox{2.6}{\ensuremath{\displaystyle\sum}}}\limits_{e\in P}W(e)$.
       \begin{itemize}\setlength{\itemsep}{0.35ex}
-        \item[\done] $=\omega(P),\ \ell(P)=h$ --- a \textbf{fewest-edge} path.
-        \item[\dtwo] $=\min_P\omega(P)$ --- least weight; \emph{the only metric}.
-        \item[\dthree] $=\min\{\omega(P):\ell(P)=h\}$ --- hybrid (least weight, fewest edges).
+        \item[\done] $=\omega(P),\ \ell(P)=h^*$ (Dijkstra alg.) \\ --- a fewest-edge path.
+        \item[\dtwo] $=\min_P\omega(P)$ \\ --- least weight; \emph{the only metric}.
+        \item[\dthree] $=\min\{\omega(P):\ell(P)=h^*\}$ \\ --- hybrid (least weight, fewest edges).
       \end{itemize}
       \vskip0.5ex\centering
       \begin{tikzpicture}[scale=1.5,every node/.style={circle,draw=dcInk,fill=dcPaper,
@@ -108,18 +111,19 @@
     \begin{block}{A universal ordering}
       \large For \emph{every} pair of nodes,
       \[ \textcolor{dcD2}{d_2(v,w)} \;\le\; \textcolor{dcD3}{d_3(v,w)} \;\le\; \textcolor{dcD1}{d_1(v,w)}. \]
-      This carries over to one-dimensional persistent homology.
+      % This carries over to one-dimensional persistent homology.
+      This universal ordering induces an injection in one-dimensional persistent homology
     \end{block}
     \begin{block}{Barcode injection}
-      \large The birth edges nest, $B_2\subseteq B_3\subseteq B_1$, giving injections
+      \large The birth edges nest, $B_2\subseteq B_3\subseteq B_1$, give injections
       \[ \mathrm{bcd}_1(\textcolor{dcD2}{d_2}) \hookrightarrow
          \mathrm{bcd}_1(\textcolor{dcD3}{d_3}) \hookrightarrow
          \mathrm{bcd}_1(\textcolor{dcD1}{d_1}). \]
-      A \textbf{nontrivial theorem} for path-representable distances (\textbf{Heo--Choi--Jung 2025}, arXiv:2501.03553).\par\vskip0.3ex
+      by \textbf{nontrivial theorem} for path-representable distances (\textbf{Heo--Choi--Jung 2025}).\par\vskip0.3ex
       Each cycle keeps its \textbf{birth}; its \textbf{lifespan grows}
       $\textcolor{dcD2}{d_2}\!\le\!\textcolor{dcD3}{d_3}\!\le\!\textcolor{dcD1}{d_1}$,
       and the number of cycles can only increase.
-      \vskip0.5ex\centering
+      \vskip3.5ex\centering
       \begin{tikzpicture}[xscale=2.6,yscale=1.3]
         \foreach \y/\bx/\dx/\col in {2/0/3.0/dcD1, 1/0/2.0/dcD3, 0/0/1.2/dcD2}{
           \draw[\col,line width=6pt,line cap=round] (\bx,\y) -- (\dx,\y);
@@ -131,7 +135,7 @@
       \end{tikzpicture}\\[0.4ex]
       \includegraphics[width=0.62\linewidth]{fig_persistence_diagram.pdf}\\[0.2ex]
       {\normalsize On real music: \textcolor{dcD1}{$d_1$} points lie above
-       \textcolor{dcD2}{$d_2$} --- longer lifespans, shared births.}
+       \textcolor{dcD2}{$d_2$} \\ --- longer lifespans, shared births.}
     \end{block}
     \begin{block}{Why it matters}
       \large The same piece yields \emph{different but nested} topological readings.
@@ -148,7 +152,7 @@
        \textcolor{dcD1}{$d_1$} (hot)\\ the ordering is visible.}\\[0.9ex]
       \includegraphics[width=\linewidth]{fig_barcodes.pdf}\\[0.3ex]
       {\normalsize $H_1$ barcodes: $|\mathrm{bcd}_1(\textcolor{dcD1}{d_1})|,\,|\mathrm{bcd}_1(\textcolor{dcD3}{d_3})|,\,|\mathrm{bcd}_1(\textcolor{dcD2}{d_2})| = \mathbf{7,4,3}$;
-       lifespans grow, births shared.}
+       \\ lifespans grow, births shared.}
     \end{block}
     \begin{block}{Distilling the core}
       \large Ranking $\textcolor{dcD1}{d_1}$ cycles by how far down they survive
@@ -158,7 +162,8 @@
     \begin{block}{Takeaways \& future work}
       \large
       \begin{itemize}\setlength{\itemsep}{0.6ex}
-        \item Distance choice $=$ a tunable lens; results are nested, not arbitrary.
+        \item Distance choice $=$ a tunable lens; 
+        \\ results are nested, not arbitrary.
         \item Toward \textbf{AI music composition} with multiple stylistic perspectives
               from one source.
       \end{itemize}
@@ -178,7 +183,7 @@
 % ===================== FOOTER =====================
 \begin{beamercolorbox}[wd=\paperwidth,sep=1.0ex,leftskip=2ex,rightskip=2ex]{headline}
   {\color{dcPaper}\normalsize Key refs: \textbf{Heo--Choi--Jung (2025) arXiv:2501.03553} (barcode injection); Tran--Park--Jung (2023) \emph{J.\ Math.\ Music}; Sethares--Budney (2014).\\[0.4ex]
-  Funded by NRF Korea (2021R1A2C3009648), KIAS Transdisciplinary program \& MSIT InnoCORE (N10250156). \quad Contact: hew0920@postech.ac.kr\\[0.4ex]
+  Funded by NRF Korea (2021R1A2C3009648), KIAS Transdisciplinary program \& MSIT InnoCORE (N10250156). \quad Contact: dms6721@unist.ac.kr\\[0.4ex]
   \textbf{This work:}\enspace \emph{Journal of Mathematics and Music}\ (2025)\enspace\textperiodcentered\enspace doi:\,10.1080/17459737.2025.2568844\enspace\textperiodcentered\enspace arXiv:2506.13595}
 \end{beamercolorbox}
 \end{frame}
