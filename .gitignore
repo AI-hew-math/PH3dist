@@ -10,3 +10,7 @@ assets/gayageum_samples/
 assets/daegeum_samples/
 assets/piri_samples/
 assets/haegeum_samples/
+# QA/scratch renders, Windows download markers, and the published-paper PDF — kept out of the public repo
+poster_assets/
+*:Zone.Identifier
+/Persistent Homology of Music Network with Three Different Distances.pdf
