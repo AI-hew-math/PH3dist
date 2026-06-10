@@ -13,7 +13,10 @@
 \begin{beamercolorbox}[wd=\paperwidth,sep=1.4ex,leftskip=2ex,rightskip=2ex]{headline}
 \begin{columns}[c,onlytextwidth]
   \begin{column}{0.12\paperwidth}\centering
-    {\color{dcPaper}\Large POSTECH\\MINDS\\KIAS}
+    {\setlength{\fboxsep}{7pt}\colorbox{white}{\parbox{0.86\linewidth}{\centering
+      \includegraphics[width=0.96\linewidth]{logo_postech.png}\\[1.5ex]
+      \includegraphics[width=0.96\linewidth]{logo_minds.png}\\[1.5ex]
+      \includegraphics[width=0.58\linewidth]{logo_kias.png}}}}
   \end{column}
   \begin{column}{0.74\paperwidth}\centering
     {\color{dcPaper}\Huge\bfseries Persistent Homology of Music Network}\\[0.4ex]
@@ -43,8 +46,10 @@
       \begin{itemize}\setlength{\itemsep}{1.0ex}
         \item \textbf{Three path distances}: \done\ (min edges),
               \dtwo\ (min weight --- the only metric), \dthree\ (hybrid).
-        \item \textbf{Proven ordering} $\textcolor{dcD2}{d_2}\!\le\!\textcolor{dcD3}{d_3}\!\le\!\textcolor{dcD1}{d_1}$,
-              lifting to a barcode injection $B_2\!\subseteq\!B_3\!\subseteq\!B_1$.
+        \item \textbf{Proven ordering} $\textcolor{dcD2}{d_2}\!\le\!\textcolor{dcD3}{d_3}\!\le\!\textcolor{dcD1}{d_1}$
+              lifts to a \textbf{nontrivial barcode injection}
+              $\mathrm{bcd}_1(\textcolor{dcD2}{d_2})\!\hookrightarrow\!\mathrm{bcd}_1(\textcolor{dcD3}{d_3})\!\hookrightarrow\!\mathrm{bcd}_1(\textcolor{dcD1}{d_1})$
+              (Heo--Choi--Jung 2025).
         \item \textbf{Validated} on real Korean court music --- an exact match to the paper's Table~1.
       \end{itemize}
     \end{block}
@@ -53,7 +58,7 @@
     \begin{block}{Cycle skeleton extraction}
       {\centering\includegraphics[width=\linewidth]{signature.pdf}\par}\vskip0.4ex
       {\Large On \emph{Sanghyeondodeuri} (geomungo): as \done${}\to{}$\dthree${}\to{}$\dtwo,
-      cycles vanish \textbf{7$\,\to\,$4$\,\to\,$3} --- only the robust core loops survive.}
+      the $H_1$ barcode thins $|\mathrm{bcd}_1|\,{=}\,\mathbf{7}\,{\to}\,\mathbf{4}\,{\to}\,\mathbf{3}$ --- only the robust core loops survive.}
     \end{block}
   \end{column}
 \end{columns}
@@ -71,11 +76,12 @@
       {\normalsize The music network of \emph{Sanghyeondodeuri} (geomungo).}
     \end{block}
     \begin{block}{Three path distances}
-      \large For nodes $v,w$ on the music graph $M=(V,E,W)$:
-      \begin{itemize}\setlength{\itemsep}{0.6ex}
-        \item[\done] \textbf{min-edge path} --- fewest edges (weighted sum along it).
-        \item[\dtwo] \textbf{min-weight path} --- least total weight; \emph{the only true metric}.
-        \item[\dthree] \textbf{hybrid} --- min weight \emph{among} the fewest-edge paths.
+      \large On the music graph $M=(V,E,W)$, a path $P$ has \textbf{hop count} $\ell(P)$ and
+      \textbf{weight} $\omega(P)=\sum_{e\in P}W(e)$; let $h=\min_P\ell(P)$ be the fewest hops $v\!\to\!w$.
+      \begin{itemize}\setlength{\itemsep}{0.7ex}
+        \item[\done] $\textcolor{dcD1}{d_1(v,w)}=\omega(P)$ along a \textbf{fewest-edge} path ($\ell(P)=h$).
+        \item[\dtwo] $\textcolor{dcD2}{d_2(v,w)}=\min_P\omega(P)$ --- least total weight; \emph{the only true metric}.
+        \item[\dthree] $\textcolor{dcD3}{d_3(v,w)}=\min\{\omega(P):\ell(P)=h\}$ --- least weight \emph{among} fewest-edge paths.
       \end{itemize}
       \vskip0.6ex\centering
       \begin{tikzpicture}[scale=2.0,every node/.style={circle,draw=dcInk,fill=dcPaper,
@@ -108,6 +114,9 @@
       \[ \mathrm{bcd}_1(\textcolor{dcD2}{d_2}) \hookrightarrow
          \mathrm{bcd}_1(\textcolor{dcD3}{d_3}) \hookrightarrow
          \mathrm{bcd}_1(\textcolor{dcD1}{d_1}). \]
+      \emph{This injection is not automatic}: that an ordering of distances embeds the whole
+      $H_1$ barcode is a \textbf{nontrivial theorem} for path-representable graph distances, proved in
+      \textbf{Heo, Choi \& Jung 2025} (arXiv:2501.03553).\par\vskip0.5ex
       Each cycle keeps its \textbf{birth}; its \textbf{lifespan grows}
       $\textcolor{dcD2}{d_2}\!\le\!\textcolor{dcD3}{d_3}\!\le\!\textcolor{dcD1}{d_1}$,
       and the number of cycles can only increase.
@@ -137,16 +146,10 @@
       \centering
       \includegraphics[width=\linewidth]{fig_distance_matrices.pdf}\\[0.3ex]
       {\normalsize Distance matrices: \textcolor{dcD2}{$d_2$} (cool/smooth) $\to$
-       \textcolor{dcD1}{$d_1$} (hot) --- the ordering is visible.}\\[0.9ex]
+       \textcolor{dcD1}{$d_1$} (hot)\\ the ordering is visible.}\\[0.9ex]
       \includegraphics[width=\linewidth]{fig_barcodes.pdf}\\[0.3ex]
-      {\normalsize $H_1$ barcodes: \textbf{7$\,/\,$4$\,/\,$3} bars for
-       \textcolor{dcD1}{$d_1$}$/$\textcolor{dcD3}{$d_3$}$/$\textcolor{dcD2}{$d_2$};
+      {\normalsize $H_1$ barcodes: $|\mathrm{bcd}_1(\textcolor{dcD1}{d_1})|,\,|\mathrm{bcd}_1(\textcolor{dcD3}{d_3})|,\,|\mathrm{bcd}_1(\textcolor{dcD2}{d_2})| = \mathbf{7,4,3}$;
        lifespans grow, births shared.}
-    \end{block}
-    \begin{block}{Data \& validation}
-      \large Twelve Korean court pieces (\emph{geomungo} \& \emph{haegeum}) plus
-      \emph{Twinkle, Twinkle} variations. Our pipeline reproduces the paper's
-      Table~1 \textbf{exactly} --- same births, cycle counts, and inclusion relation.
     \end{block}
     \begin{block}{Distilling the core}
       \large Ranking $\textcolor{dcD1}{d_1}$ cycles by how far down they survive
@@ -170,7 +173,7 @@
 \vfill
 % ===================== FOOTER =====================
 \begin{beamercolorbox}[wd=\paperwidth,sep=1.0ex,leftskip=2ex,rightskip=2ex]{headline}
-  {\color{dcPaper}\normalsize Key refs: Heo--Choi--Jung (2024) arXiv:2501.03553; Tran--Park--Jung (2023) \emph{J.\ Math.\ Music}; Sethares--Budney (2014). \quad
+  {\color{dcPaper}\normalsize Key refs: \textbf{Heo--Choi--Jung (2025) arXiv:2501.03553} (barcode injection); Tran--Park--Jung (2023) \emph{J.\ Math.\ Music}; Sethares--Budney (2014). \quad
   Funded by NRF Korea (2021R1A2C3009648), KIAS Transdisciplinary program \& MSIT InnoCORE (N10250156). \quad
   Contact: hew0920@postech.ac.kr \quad This work: \emph{J.\ Math.\ Music} 2025 (arXiv:2506.13595)}
 \end{beamercolorbox}
