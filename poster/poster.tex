@@ -13,7 +13,7 @@
 \begin{beamercolorbox}[wd=\paperwidth,sep=1.4ex,leftskip=2ex,rightskip=2ex]{headline}
 \begin{columns}[c,onlytextwidth]
   \begin{column}{0.12\paperwidth}\centering
-    {\color{dcPaper}\Large POSTECH\\[0.3ex]MINDS\\[0.3ex]KIAS}
+    \mbox{}
   \end{column}
   \begin{column}{0.74\paperwidth}\centering
     {\color{dcPaper}\Huge\bfseries Persistent Homology of Music Network}\\[0.4ex]
@@ -79,18 +79,20 @@
         \item[\dtwo] $\textcolor{dcD2}{d_2}=\min_P\omega(P)$ --- least weight; \emph{the only metric}.
         \item[\dthree] $\textcolor{dcD3}{d_3}=\min\{\omega(P):\ell(P)=h\}$ --- hybrid (least weight, fewest edges).
       \end{itemize}
-      \vskip0.6ex\centering
-      \begin{tikzpicture}[scale=2.0,every node/.style={circle,draw=dcInk,fill=dcPaper,
-          line width=1pt,inner sep=3pt,font=\large}]
-        \node (a) at (0,0) {a}; \node (b) at (2,1) {b};
-        \node (c) at (4,0) {c}; \node (d) at (2,-1) {d};
-        \draw[dcInk,line width=1pt] (a)--(b) node[midway,above,draw=none,fill=none]{1};
-        \draw[dcInk,line width=1pt] (b)--(c) node[midway,above,draw=none,fill=none]{1};
-        \draw[dcInk,line width=1pt] (a)--(d) node[midway,below,draw=none,fill=none]{1};
-        \draw[dcInk,line width=1pt] (d)--(c) node[midway,below,draw=none,fill=none]{1};
-        \draw[dcD2,line width=3pt] (a)--(d)--(c);
+      \vskip0.5ex\centering
+      \begin{tikzpicture}[scale=1.6,every node/.style={circle,draw=dcInk,fill=dcPaper,
+          line width=1pt,inner sep=2pt,font=\normalsize}]
+        \node (s) at (0,0) {$s$};   \node (u) at (2,1.15) {$u$};   \node (v) at (2,0) {$v$};
+        \node (w) at (1.2,-1.15) {$w$};   \node (x) at (2.8,-1.15) {$x$};   \node (t) at (4,0) {$t$};
+        \draw[dcD1,line width=3pt] (s)--(u) node[midway,above,sloped,draw=none,fill=none,font=\small]{2};
+        \draw[dcD1,line width=3pt] (u)--(t) node[midway,above,sloped,draw=none,fill=none,font=\small]{2};
+        \draw[dcD3,line width=3pt] (s)--(v) node[midway,above,draw=none,fill=none,font=\small]{1};
+        \draw[dcD3,line width=3pt] (v)--(t) node[midway,above,draw=none,fill=none,font=\small]{1};
+        \draw[dcD2,line width=3pt] (s)--(w) node[midway,below,sloped,draw=none,fill=none,font=\small]{$\tfrac12$};
+        \draw[dcD2,line width=3pt] (w)--(x) node[midway,below,draw=none,fill=none,font=\small]{$\tfrac12$};
+        \draw[dcD2,line width=3pt] (x)--(t) node[midway,below,sloped,draw=none,fill=none,font=\small]{$\tfrac12$};
       \end{tikzpicture}\\[0.3ex]
-      {\normalsize Path-based distance uses existing edges (red), not a new direct link.}
+      {\normalsize $s\!\to\!t$:\; $\textcolor{dcD1}{d_1{=}4}$ (fewest edges) $>$ $\textcolor{dcD3}{d_3{=}2}$ (fewest edges, least wt.) $>$ $\textcolor{dcD2}{d_2{=}1.5}$ (least wt.).}
     \end{block}
     \begin{block}{Only \dtwo\ is a metric}
       \large $\textcolor{dcD2}{d_2}$ satisfies the triangle inequality;
@@ -161,16 +163,16 @@
       \includegraphics[width=5cm]{qr_project.png}\\[0.2ex]
       {\normalsize Interactive explorer \& audio demos on the project page.}
     \end{block}
+    \vskip2.2ex
+    \begin{center}\setlength{\fboxsep}{0pt}%
+      \includegraphics[height=1.5cm]{logo_postech.png}\\[1.8ex]
+      \includegraphics[height=1.5cm]{logo_minds.png}\\[1.8ex]
+      \includegraphics[height=1.5cm]{logo_kias.png}%
+    \end{center}
   \end{column}
 \end{columns}
 
 \vfill
-\begin{center}\setlength{\fboxsep}{0pt}%
-  \includegraphics[height=1.15cm]{logo_postech.png}\hspace{2cm}%
-  \includegraphics[height=1.15cm]{logo_minds.png}\hspace{2cm}%
-  \includegraphics[height=1.15cm]{logo_kias.png}%
-\end{center}
-\vskip0.3ex
 % ===================== FOOTER =====================
 \begin{beamercolorbox}[wd=\paperwidth,sep=1.0ex,leftskip=2ex,rightskip=2ex]{headline}
   {\color{dcPaper}\normalsize Key refs: \textbf{Heo--Choi--Jung (2025) arXiv:2501.03553} (barcode injection); Tran--Park--Jung (2023) \emph{J.\ Math.\ Music}; Sethares--Budney (2014). \quad
