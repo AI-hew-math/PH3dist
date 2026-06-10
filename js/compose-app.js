@@ -271,7 +271,7 @@
       try {
         res = TDA.analyze(song);
         render(name);
-        status("done — cycles " + ORDER.map((k) => res[k].length).join("→") + "  ·  now train to compose");
+        status("done — |bcd₁| = " + ORDER.map((k) => res[k].length).join("→") + "  ·  now train to compose");
       } catch (e) { status("error: " + e.message); }
     }, 15);
   }
@@ -279,7 +279,7 @@
   function render(name) {
     const box = $("tryResult"); box.innerHTML = "";
     const h = document.createElement("h3");
-    h.textContent = (name || "your piece") + " — surviving cycles " + ORDER.map((k) => res[k].length).join(" → ");
+    h.textContent = (name || "your piece") + " — |bcd₁| = " + ORDER.map((k) => res[k].length).join(" → ");
     box.appendChild(h);
     const counts = ORDER.map((k) => res[k].length), maxC = Math.max(...counts);
     let advice = "";
@@ -292,7 +292,7 @@
       const row = document.createElement("div"); row.className = "tryrow";
       const head = document.createElement("div"); head.className = "tryhead";
       const lab = document.createElement("span"); lab.className = "lab " + k;
-      lab.textContent = "d" + SUB[k] + " — " + res[k].length + " cycles"; head.appendChild(lab);
+      lab.textContent = "|bcd₁(d" + SUB[k] + ")| = " + res[k].length; head.appendChild(lab);
       const b = document.createElement("button"); b.className = "btn small"; b.id = "bbtn_" + k;
       b.textContent = "▶ Play"; b.disabled = true;
       b.onclick = () => { if (comps.B[k]) toggle("B:" + k, comps.B[k], b); }; head.appendChild(b);

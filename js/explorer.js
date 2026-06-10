@@ -1,5 +1,7 @@
 const DCOL = {d1:"#3E8E7E", d3:"#E0A526", d2:"#C8443B"};
 const ORDER = ["d1","d3","d2"];   // d1 -> d3 -> d2 (distill 7->4->3), consistent with the rest of the page
+const SUB = {d1:"₁", d3:"₃", d2:"₂"};            // |bcd₁(d_i)| barcode-cardinality label
+const bcd = (k) => "|bcd₁(d" + SUB[k] + ")|";
 const INK = "#1A2238";
 
 function heatColor(t){ // blue (low) -> hanji -> vermilion (high)
@@ -71,7 +73,7 @@ function renderNetwork(data, key){
   pos.forEach(p=>{const c=document.createElementNS(NS,"circle");
     c.setAttribute("cx",sx(p[0]));c.setAttribute("cy",sy(p[1]));c.setAttribute("r","2.5");
     c.setAttribute("fill",INK);c.setAttribute("fill-opacity","0.5");svg.appendChild(c);});
-  return panel(`${key.toUpperCase()} — ${data.persistence[key].length} cycles`, svg);
+  return panel(`${bcd(key)} = ${data.persistence[key].length}`, svg);
 }
 
 function render(data){
@@ -79,10 +81,10 @@ function render(data){
   const m=cont("viz-matrices"), b=cont("viz-barcodes"), nw=cont("viz-networks");
   let gmax=0; ORDER.forEach(k=> data.matrices[k].forEach(row=> row.forEach(v=>{ if(v>gmax) gmax=v; })) );
   ORDER.forEach(k=> m.appendChild(renderHeatmap(data.matrices[k], k.toUpperCase(), gmax)) );
-  ORDER.forEach(k=> b.appendChild(panel(`${k.toUpperCase()} — ${data.persistence[k].length} bars`, barcodeSVG(data.persistence[k], k))) );
+  ORDER.forEach(k=> b.appendChild(panel(`${bcd(k)} = ${data.persistence[k].length}`, barcodeSVG(data.persistence[k], k))) );
   ORDER.forEach(k=> nw.appendChild(renderNetwork(data, k)) );
   document.getElementById("counts").textContent =
-    `cycles: d1=${data.persistence.d1.length}, d3=${data.persistence.d3.length}, d2=${data.persistence.d2.length}`;
+    `${bcd("d1")}=${data.persistence.d1.length},  ${bcd("d3")}=${data.persistence.d3.length},  ${bcd("d2")}=${data.persistence.d2.length}`;
 }
 
 async function load(slug){ const r=await fetch(`data/${slug}.json`); render(await r.json()); }

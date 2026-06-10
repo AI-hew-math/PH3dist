@@ -83,20 +83,20 @@
   </div></section>
   <section><div class="wrap">
     <h2>Listen: sonifying the cycle skeleton</h2>
-    <p>On <em>Sanghyeondodeuri</em> (geomungo), sweeping the distance distills the piece from
-    <strong>$7\to4\to3$</strong> cycles — only the robust core loops survive.</p>
+    <p>On <em>Sanghyeondodeuri</em> (geomungo), sweeping the distance thins the $H_1$ barcode:
+    <strong>$|\mathrm{bcd}_1(d_1)|{=}7 \to |\mathrm{bcd}_1(d_3)|{=}4 \to |\mathrm{bcd}_1(d_2)|{=}3$</strong> — only the robust core loops survive.</p>
     <div class="viz">
-      <figure><img src="assets/signature_d1.png" alt="d1 cycles"><figcaption><span class="d1">$d_1$</span> — 7 cycles</figcaption></figure>
-      <figure><img src="assets/signature_d3.png" alt="d3 cycles"><figcaption><span class="d3">$d_3$</span> — 4 cycles</figcaption></figure>
-      <figure><img src="assets/signature_d2.png" alt="d2 cycles"><figcaption><span class="d2">$d_2$</span> — 3 cycles (core)</figcaption></figure>
+      <figure><img src="assets/signature_d1.png" alt="d1 cycles"><figcaption><span class="d1">$|\mathrm{bcd}_1(d_1)| = 7$</span></figcaption></figure>
+      <figure><img src="assets/signature_d3.png" alt="d3 cycles"><figcaption><span class="d3">$|\mathrm{bcd}_1(d_3)| = 4$</span></figcaption></figure>
+      <figure><img src="assets/signature_d2.png" alt="d2 cycles"><figcaption><span class="d2">$|\mathrm{bcd}_1(d_2)| = 3$</span> (core)</figcaption></figure>
     </div>
     <p>Each distance's surviving $H_1$ cycles of <em>Sanghyeondodeuri</em>, looped to the <strong>same length</strong>
     and rendered with <strong>real geomungo</strong> samples. As $d_1\to d_3\to d_2$, fewer cycles means the core
     motif <strong>repeats more</strong> --- sparser and more insistent.</p>
     <div class="audio">
-      <div class="ap"><div class="lab d1">$d_1$ — 7 cycles (full)</div><audio controls preload="none" src="audio/d1.mp3" data-roll="d1"></audio></div>
-      <div class="ap"><div class="lab d3">$d_3$ — 4 cycles</div><audio controls preload="none" src="audio/d3.mp3" data-roll="d3"></audio></div>
-      <div class="ap"><div class="lab d2">$d_2$ — 3 cycles (core)</div><audio controls preload="none" src="audio/d2.mp3" data-roll="d2"></audio></div>
+      <div class="ap"><div class="lab d1">$|\mathrm{bcd}_1(d_1)| = 7$ (full)</div><audio controls preload="none" src="audio/d1.mp3" data-roll="d1"></audio></div>
+      <div class="ap"><div class="lab d3">$|\mathrm{bcd}_1(d_3)| = 4$</div><audio controls preload="none" src="audio/d3.mp3" data-roll="d3"></audio></div>
+      <div class="ap"><div class="lab d2">$|\mathrm{bcd}_1(d_2)| = 3$ (core)</div><audio controls preload="none" src="audio/d2.mp3" data-roll="d2"></audio></div>
     </div>
     <p style="font-size:.9rem;opacity:.75">Direct cycle sonification — the surviving loops sounded as-is with real
     geomungo samples (<a href="https://www.gugak.go.kr/digitaleum/">National Gugak Center · Digitaleum</a>, KOGL Type-1).
@@ -106,7 +106,7 @@
   <section><div class="wrap">
     <h2>Distance-varied AI composition</h2>
     <p>Beyond replaying the cycles, we <strong>compose new geomungo pieces from the cycle structure</strong> of
-    <em>Sanghyeondodeuri</em> (geomungo) — the same 189-note seed piece analysed above (7&#8202;/&#8202;4&#8202;/&#8202;3 cycles) —
+    <em>Sanghyeondodeuri</em> (geomungo) — the same 189-note seed piece analysed above ($|\mathrm{bcd}_1| = 7,4,3$) —
     following the neural composition algorithm (Algorithm B) of
     <a href="https://arxiv.org/abs/2203.15468">Tran, Lee &amp; Jung (2024)</a>, run <em>separately for each distance</em>.
     A different distance gives different surviving cycles and a different "overlap" timeline, so the same machinery
@@ -118,9 +118,9 @@
     Steps anchored by a surviving cycle keep the learned note; the gaps improvise — so
     $d_2$, with the fewest surviving cycles, departs from the original most.</p>
     <div class="audio">
-      <div class="ap"><div class="lab d1">$d_1$ — 7 cycles</div><audio controls preload="none" src="audio/compB_d1.mp3" data-roll="compB_d1"></audio></div>
-      <div class="ap"><div class="lab d3">$d_3$ — 4 cycles</div><audio controls preload="none" src="audio/compB_d3.mp3" data-roll="compB_d3"></audio></div>
-      <div class="ap"><div class="lab d2">$d_2$ — 3 cycles</div><audio controls preload="none" src="audio/compB_d2.mp3" data-roll="compB_d2"></audio></div>
+      <div class="ap"><div class="lab d1">$|\mathrm{bcd}_1(d_1)| = 7$</div><audio controls preload="none" src="audio/compB_d1.mp3" data-roll="compB_d1"></audio></div>
+      <div class="ap"><div class="lab d3">$|\mathrm{bcd}_1(d_3)| = 4$</div><audio controls preload="none" src="audio/compB_d3.mp3" data-roll="compB_d3"></audio></div>
+      <div class="ap"><div class="lab d2">$|\mathrm{bcd}_1(d_2)| = 3$</div><audio controls preload="none" src="audio/compB_d2.mp3" data-roll="compB_d2"></audio></div>
     </div>
     <p style="font-size:.9rem;opacity:.75">~1-min excerpts. Algorithm: Tran, Lee &amp; Jung,
     <em>Machine Composition of Korean Music via TDA and ANN</em>, J. Math. Music 18(1):20–41, 2024
